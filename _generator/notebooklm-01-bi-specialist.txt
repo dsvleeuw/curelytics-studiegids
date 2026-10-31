@@ -1,0 +1,792 @@
+# CureLytics — BI Specialist: studiemateriaal voor uitlegvideo's
+
+Doel van deze bron: korte, heldere uitlegvideo's maken voor iemand die zich voorbereidt op een sollicitatiegesprek bij CureLytics voor de rol BI Specialist. Leg elk onderwerp uit vanaf nul, eerst op junior-niveau en daarna de senior-verdieping, met de praktijkvoorbeelden en ezelsbruggetjes uit dit document. Taal: Nederlands; vaktermen in het Engels zoals in de praktijk.
+
+Over de vacature: Vacature BI Specialist (medior/senior): Power BI, DAX, SQL, Kimball & Data Vault, Azure Synapse / Databricks / Snowflake, dashboards en advies.
+
+## Context: het bedrijf en de rol van consultant
+
+### Context 001 — CureLytics in één minuut
+
+Kern: CureLytics (Haarlem, onderdeel van QRC Group) versnelt digitale transformatie door data-professionals te detacheren en complete dataplatformen te beheren – stap voor stap.
+
+Visual: Stappen: Organisatie met datavraag —(vraag)→ CureLytics intake & match —(detachering)→ Consultant bij de klant —(waarde)→ Resultaat: betere beslissingen
+Toelichting: Het verdienmodel: een klant heeft een datavraag, CureLytics levert de juiste professional of het hele team.
+
+Wat je moet weten:
+- Wat: Data & Analytics detachering + diensten (data engineers, BI-analisten, business analisten).
+- Sectoren: publieke sector, zorg, onderwijs, bedrijfsleven (ook verzekeraars/banken via netwerk).
+- Waar: Haarlem, hybride, 36–40 uur.
+- Aanbod: €2.000 opleidingsbudget, 27 vakantiedagen, verjaardag vrij, vrijwilligersdag, laptop + telefoon.
+- Gefaseerde aanpak: eerst één specialist, daarna groeien naar team of volledig platformbeheer.
+- Ze kunnen platformen ook beheren en optimaliseren – dus niet alleen 'uren leveren' maar verantwoordelijkheid.
+- Onderdeel van QRC Group: denk aan synergie met zusterbedrijven (vraag ernaar!).
+- Publieke sector = veel aandacht voor AVG, aanbestedingen, BIO/ISO-normen en stakeholders met belangen.
+
+### Context 003 — Detachering en de consultant-houding
+
+Kern: Bij detachering ben je in dienst bij CureLytics maar werk je bij en voor de klant – je bent dus vakspecialist én visitekaartje.
+
+Visual: Vergelijking. Jij & CureLytics: Contract, salaris, opleiding; Coaching & community; Kwaliteit bewaken. Tegenover Jij & de klant: Dagelijks werk & team; Opdrachtgever & doelen; Resultaat leveren.
+Toelichting: Twee relaties tegelijk: werkgever (CureLytics) en opdrachtgever (klant).
+
+Wat je moet weten:
+- Je wisselt van tijd tot tijd van opdracht → snel leren, veel verschillende omgevingen.
+- Belangrijk: snel inwerken, vragen stellen, afspraken nakomen.
+- Communiceer helder in het Nederlands – alle vacatures vragen dat.
+- Je vertegenwoordigt CureLytics: professioneel gedrag = vervolgopdrachten.
+- Trusted advisor: niet alleen uitvoeren wat gevraagd wordt, maar adviseren wat nodig is.
+- Verwachtingen managen: scope, planning, 'nee' zeggen met een alternatief.
+- Kennisoverdracht zodat de klant niet afhankelijk blijft – en junioren coachen.
+- Commercieel bewust: kansen voor vervolgwerk signaleren en doorgeven.
+
+## Inhoud
+
+001. Wat is Business Intelligence?
+002. Datawarehouse, ETL en ELT
+003. Kimball: het ster-schema
+004. Slowly Changing Dimensions
+005. Data Vault 2.0
+006. Power BI-architectuur
+007. DAX: measures en filtercontext
+008. SQL essentials
+009. Cloud datawarehouses
+010. Dashboard design en KPI-rapportage
+011. Impact- en gap-analyse
+012. Senior: BI-strategie, migratie en coaching
+
+## Onderwerpen
+
+### 001 — Wat is Business Intelligence?
+
+Kern: BI is het proces dat ruwe data omzet in inzicht (rapporten, dashboards, KPI's), zodat mensen betere beslissingen nemen.
+
+Visual: Stappen: Data —(structureren)→ Informatie —(analyseren)→ Inzicht —(beslissen)→ Actie
+Toelichting: De BI-waardeketen. Een dashboard is pas geslaagd als het tot een actie leidt.
+
+Extra visual: Piramide, van top naar basis: Wijsheid (Wat moeten we doen?); Kennis (Waarom gebeurt het?); Informatie (Wat is er gebeurd?); Data (Ruwe feiten)
+Toelichting: De DIKW-piramide: BI tilt data omhoog naar informatie en kennis.
+Extra visual: Stappen: Beschrijvend wat? → Diagnostisch waarom? → Voorspellend wat komt? → Voorschrijvend wat doen?
+Toelichting: Vier niveaus van analyse; klassieke BI zit vooral links.
+
+Junior-niveau (de basis):
+- KPI (Key Performance Indicator): meetbare waarde die laat zien of een doel gehaald wordt.
+- Soorten analyse: beschrijvend (wat gebeurde), diagnostisch (waarom), voorspellend, voorschrijvend.
+- Typisch BI-product: Power BI-dashboard met KPI's, trends en filters.
+- BI-specialist = bouwer van datamodel + rapport, en gesprekspartner van de gebruiker.
+
+Senior-niveau (verdieping):
+- BI ↔ data science: BI kijkt vooral terug/naar nu, data science voorspelt.
+- Self-service BI: gebruikers maken zelf rapporten op een gecertificeerd datamodel – governance nodig.
+- 'Single source of truth': één gedeelde definitie per KPI voorkomt discussies over cijfers.
+- Waarde aantonen: koppel elk dashboard aan een concreet besluit of proces.
+
+Praktijkvoorbeeld:
+Een ziekenhuis ziet in het OK-dashboard dat de bezettingsgraad op dinsdag structureel laag is. Inzicht: één specialisme plant te weinig. Actie: planning aangepast, 6% meer operaties per week. Dát is BI: van getal naar besluit.
+
+Begrippen:
+- KPI: Key Performance Indicator: meetbare indicator voor een doel.
+- Dashboard: Overzicht van KPI's op één scherm.
+- Self-service BI: Gebruikers maken zelf analyses op een betrouwbaar model.
+- Single source of truth: Eén afgesproken bron/definitie per cijfer.
+
+Veelgemaakte fouten:
+- Dashboards bouwen die niemand gebruikt omdat de vraag nooit is opgehaald.
+- Elke afdeling eigen KPI-definities laten hanteren.
+- Te veel KPI's tegelijk – niemand ziet meer wat belangrijk is.
+
+Ezelsbruggetje: D-I-I-A: 'Data Is Information Accelerated' – of: Data → Informatie → Inzicht → Actie.
+
+Oefenvraag uit een sollicitatiegesprek: Wat maakt een BI-oplossing succesvol?
+Sterke antwoordrichting:
+- Het beantwoordt een echte vraag van de gebruiker en wordt gebruikt.
+- Cijfers zijn betrouwbaar en eenduidig gedefinieerd.
+- Het is snel, overzichtelijk en onderhoudbaar.
+
+Snelle controlevragen:
+- V: Wat is het verschil tussen data en informatie? A: Informatie is data met context en structuur, zodat het betekenis heeft.
+- V: Noem de vier soorten analyse. A: Beschrijvend, diagnostisch, voorspellend, voorschrijvend.
+- V: Wat is self-service BI? A: Gebruikers maken zelf rapporten op een gecertificeerd datamodel.
+
+Waarom dit telt bij CureLytics: 'Power BI dashboards en KPI-rapportages ontwikkelen' is de eerste taak in de medior-vacature.
+
+### 002 — Datawarehouse, ETL en ELT
+
+Kern: Een datawarehouse is een centrale database die data uit veel bronnen samenbrengt voor analyse; ETL/ELT is het proces dat die data erin laadt.
+
+Visual: Vergelijking. ETL: Extract uit bron; Transform buiten DWH; Load schone data; Klassiek, on-premise. Tegenover ELT: Extract uit bron; Load ruwe data; Transform ín DWH/lake; Modern, cloud.
+Toelichting: Verschil zit in de volgorde: waar en wanneer transformeer je?
+
+Extra visual: Lagen, van boven (dichtst bij de gebruiker) naar onder: Datamarts / presentatie (Ster-schema's per onderwerp); Integratielaag (DV of 3NF) (Historie, alle bronnen samen); Staging (1-op-1 kopie, tijdelijk); Bronsystemen (ERP, CRM, EPD, zaaksysteem)
+Toelichting: Klassieke DWH-lagen van bron (onder) naar gebruiker (boven).
+Extra visual: Vergelijking. OLTP (bron): Veel kleine transacties; Genormaliseerd; Huidige stand. Tegenover OLAP (DWH): Grote analyses; Gedenormaliseerd (ster); Historie.
+Toelichting: Waarom je niet rechtstreeks op het bronsysteem rapporteert.
+
+Junior-niveau (de basis):
+- OLTP (bronsysteem: veel kleine transacties) vs OLAP (DWH: grote analyses).
+- Lagen in een DWH: staging → integratie → datamarts / presentatielaag.
+- Tools: Azure Data Factory, Databricks, dbt, SSIS (klassiek).
+- ELT is populair omdat cloud-rekenkracht goedkoop en schaalbaar is.
+
+Senior-niveau (verdieping):
+- Incrementeel laden (alleen wijzigingen, via watermark of CDC – change data capture) i.p.v. volledige reload.
+- Historie bewaren en herlaadbaarheid ontwerpen: kun je gisteren opnieuw draaien zonder dubbele data?
+- DWH vs data lake vs lakehouse – zie Data Engineer-fiches.
+- Metadata-gedreven pipelines: één generiek patroon voor honderden tabellen.
+
+Praktijkvoorbeeld:
+Een woningcorporatie laadde elke nacht alle 2 miljoen huurtransacties opnieuw (4 uur). Overstap naar incrementeel laden met een watermark op gewijzigd_op: nog maar 15 minuten, en de bron wordt minder belast.
+
+Begrippen:
+- Staging: Tijdelijke landingsplek voor ruwe brondata.
+- CDC: Change Data Capture: alleen wijzigingen uit de bron ophalen.
+- Watermark: Laatst geladen tijdstip/ID, startpunt voor de volgende run.
+- Full load: Alles opnieuw laden.
+- Incremental load: Alleen nieuw/gewijzigd laden.
+
+Codevoorbeeld (SQL):
+-- Incrementeel laden met een watermark
+DECLARE @laatst DATETIME2 = (SELECT max_gewijzigd FROM etl.watermark WHERE tabel = 'contract');
+
+INSERT INTO stg.contract
+SELECT * FROM bron.contract
+WHERE  gewijzigd_op > @laatst;
+
+UPDATE etl.watermark
+SET    max_gewijzigd = (SELECT MAX(gewijzigd_op) FROM stg.contract)
+WHERE  tabel = 'contract';
+
+Veelgemaakte fouten:
+- Rapporteren direct op het productiesysteem → traag en belastend.
+- Geen historie bewaren: 'hoe was het vorig jaar?' kan dan niet meer.
+- Verwijderde records in de bron vergeten bij incrementeel laden.
+
+Ezelsbruggetje: ETL = eerst Tafel dekken dan Laden. ELT = eerst alles op tafel (Load), dan pas netjes maken.
+
+Oefenvraag uit een sollicitatiegesprek: Wanneer kies je voor ELT in plaats van ETL?
+Sterke antwoordrichting:
+- In de cloud met een krachtig warehouse/lakehouse (Synapse, Snowflake, Databricks).
+- Als je ruwe data wilt bewaren voor latere, nog onbekende vragen.
+- ETL blijft zinvol bij gevoelige data die vóór opslag gemaskeerd moet worden.
+
+Snelle controlevragen:
+- V: Wat is het verschil tussen ETL en ELT? A: ETL transformeert vóór het laden, ELT laadt eerst ruw en transformeert in het DWH/lake.
+- V: Wat is CDC? A: Change Data Capture: alleen de wijzigingen uit de bron verwerken.
+- V: Waarom niet op OLTP rapporteren? A: Het is gemaakt voor transacties, niet voor analyses; het wordt traag en heeft geen historie.
+
+Waarom dit telt bij CureLytics: 'Kimball datamodellen en ETL-pipelines ontwerpen (ADF, Databricks)' staat letterlijk in de vacature.
+
+### 003 — Kimball: het ster-schema
+
+Kern: Kimball modelleert data als een feitentabel (meetbare gebeurtenissen) omringd door dimensietabellen (de context: wie, wat, waar, wanneer).
+
+Visual: Centraal begrip Feit: Verkoop, met daaromheen: Dim Datum; Dim Klant; Dim Product; Dim Winkel; Dim Medewerker
+Toelichting: Ster-schema: één feitentabel in het midden, dimensies eromheen via sleutels.
+
+Extra visual: Vergelijking. Feitentabel: Getallen (bedrag, aantal); Foreign keys; Veel rijen, smal. Tegenover Dimensietabel: Beschrijvingen; Surrogate key; Weinig rijen, breed.
+Toelichting: Feit vs dimensie in één oogopslag.
+Extra visual: Stappen: Kies het proces → Bepaal de grain → Kies de dimensies → Kies de feiten
+Toelichting: Kimball's vier stappen voor dimensioneel ontwerp.
+
+Junior-niveau (de basis):
+- Feit = getallen die je optelt: bedrag, aantal, duur.
+- Dimensie = beschrijvingen waarop je filtert/groepeert: klantnaam, regio, maand.
+- Feiten hebben foreign keys naar dimensies (surrogate keys).
+- Power BI werkt het best met een ster-schema (snel én makkelijk DAX).
+
+Senior-niveau (verdieping):
+- Grain eerst bepalen: wat is één rij? (één orderregel per dag?) – de belangrijkste ontwerpbeslissing.
+- Typen feiten: transactie, periodieke snapshot, accumulerende snapshot.
+- Conformed dimensions en de bus matrix: dimensies hergebruiken over processen heen.
+- Sneeuwvlok-schema (genormaliseerde dimensies) vermijden in Power BI.
+
+Praktijkvoorbeeld:
+Bij een thuiszorgorganisatie: proces = geleverde zorgmomenten. Grain = één rij per bezoek. Dimensies: cliënt (gepseudonimiseerd), medewerker, datum, tijdvak, zorgsoort, regio. Feiten: geplande minuten, geleverde minuten, reistijd. Nu kan het management zien waar geplande en geleverde zorg uit elkaar lopen.
+
+Begrippen:
+- Grain: Wat één rij in de feitentabel voorstelt.
+- Surrogate key: Betekenisloze sleutel (1, 2, 3…) gemaakt in het DWH.
+- Business key: Sleutel uit de bron, bv. klantnummer.
+- Conformed dimension: Dimensie die door meerdere feitentabellen gedeeld wordt.
+- Bus matrix: Tabel: processen × gedeelde dimensies.
+
+Voorbeeldtabel (Type feit | Voorbeeld | Rijen):
+- Transactie | Elke verkoop | Eén per gebeurtenis
+- Periodieke snapshot | Voorraad per dag | Eén per periode per item
+- Accumulerende snapshot | Aanvraag: ingediend → besluit | Eén per proces, wordt bijgewerkt
+
+Veelgemaakte fouten:
+- De grain niet expliciet vastleggen → dubbeltellingen.
+- Tekstvelden in de feitentabel zetten in plaats van in een dimensie.
+- Elke afdeling een eigen 'klant'-dimensie geven (niet conformed).
+
+Ezelsbruggetje: Feit = Figuur (getal). Dimensie = Details. 'Feiten tel je, dimensies vertel je.'
+
+Oefenvraag uit een sollicitatiegesprek: Ontwerp een datamodel voor ziekteverzuim bij een gemeente.
+Sterke antwoordrichting:
+- Grain: één rij per medewerker per verzuimdag (of per verzuimmelding).
+- Feit: verzuimdagen, uren; dimensies: medewerker, afdeling, datum, verzuimsoort.
+- Let op AVG: medische reden niet opslaan; RLS per afdeling.
+
+Snelle controlevragen:
+- V: Wat is de grain? A: Wat één rij in de feitentabel betekent.
+- V: Waarom surrogate keys? A: Onafhankelijk van de bron en nodig voor historie (SCD2).
+- V: Wat is een conformed dimension? A: Een dimensie die door meerdere feitentabellen hergebruikt wordt.
+- V: Ster- vs sneeuwvlokschema? A: Ster: dimensies plat; sneeuwvlok: dimensies genormaliseerd – ster is beter voor Power BI.
+
+Waarom dit telt bij CureLytics: Kimball wordt in álle BI- en DE-vacatures genoemd – reken op een modelleervraag in de case.
+
+### 004 — Slowly Changing Dimensions
+
+Kern: Een SCD bepaalt wat je doet als een dimensie-kenmerk verandert (bv. klant verhuist): overschrijven (type 1) of historie bewaren (type 2).
+
+Visual: Vergelijking. SCD type 1: Oude waarde overschreven; Geen historie; Simpel, weinig opslag. Tegenover SCD type 2: Nieuwe rij per wijziging; Geldig_van / geldig_tot; Rapporteren 'zoals het toen was'.
+Toelichting: Klant verhuist van Haarlem naar Leiden: type 1 toont overal Leiden, type 2 kent beide periodes.
+
+Extra visual: Tijdlijn: Haarlem (2019 – 2023) → Leiden (2023 – 2025) → Utrecht (2025 – nu)
+Toelichting: SCD2: dezelfde klant krijgt per woonplaats een eigen rij met geldigheidsperiode.
+
+Junior-niveau (de basis):
+- Type 0: verandert nooit (geboortedatum).
+- Type 1: overschrijven – voor correcties (typfout).
+- Type 2: nieuwe rij + geldigheidsdatums + 'is_actueel'-vlag.
+- Daarom gebruik je een surrogate key: dezelfde klant heeft meerdere rijen.
+
+Senior-niveau (verdieping):
+- Type 3 (vorige waarde in extra kolom) en hybride type 6 bestaan ook.
+- Kies per kolom: niet elk attribuut hoeft historie.
+- Implementatie: MERGE-statement, dbt snapshots, of Delta Lake MERGE.
+- Late-arriving data en correcties met terugwerkende kracht apart afhandelen.
+
+Praktijkvoorbeeld:
+Een medewerker gaat in juni van team Noord naar team Zuid. Met SCD1 zouden alle uren van januari tot juni plotseling bij Zuid staan – de verzuimcijfers van Noord kloppen dan niet meer. Met SCD2 blijven die uren bij Noord en tellen de nieuwe uren bij Zuid.
+
+Begrippen:
+- SCD: Slowly Changing Dimension – hoe je omgaat met wijzigende kenmerken.
+- Geldig_van / geldig_tot: Periode waarin een dimensierij geldig is.
+- is_actueel: Vlag voor de huidige versie van een rij.
+- Late-arriving fact: Een feit dat binnenkomt na een dimensiewijziging.
+
+Voorbeeldtabel (klant_sk | klant_nr | woonplaats | geldig_van | geldig_tot | actueel):
+- 101 | K-77 | Haarlem | 2019-01-01 | 2023-03-31 | nee
+- 245 | K-77 | Leiden | 2023-04-01 | 2025-06-30 | nee
+- 388 | K-77 | Utrecht | 2025-07-01 | 9999-12-31 | ja
+
+Codevoorbeeld (SQL):
+-- SCD2 in twee stappen
+-- 1) huidige rij afsluiten als er iets veranderd is
+UPDATE d SET geldig_tot = CAST(GETDATE() AS DATE) - 1, is_actueel = 0
+FROM   dim_klant d JOIN stg_klant s ON s.klant_nr = d.klant_nr
+WHERE  d.is_actueel = 1 AND d.woonplaats <> s.woonplaats;
+
+-- 2) nieuwe versie invoegen
+INSERT INTO dim_klant (klant_nr, woonplaats, geldig_van, geldig_tot, is_actueel)
+SELECT s.klant_nr, s.woonplaats, CAST(GETDATE() AS DATE), '9999-12-31', 1
+FROM   stg_klant s
+LEFT JOIN dim_klant d ON d.klant_nr = s.klant_nr AND d.is_actueel = 1
+WHERE  d.klant_nr IS NULL;
+
+Veelgemaakte fouten:
+- Joinen op de business key in plaats van de surrogate key → dubbele rijen.
+- Overal SCD2 toepassen, ook op typfoutcorrecties.
+- Geen 'einddatum ver in de toekomst' gebruiken, waardoor BETWEEN-joins mislukken.
+
+Ezelsbruggetje: Type 1 = 1 rij (overschrijven). Type 2 = 2 (of meer) rijen (geschiedenis).
+
+Oefenvraag uit een sollicitatiegesprek: Een medewerker wisselt van afdeling. Hoe zorg je dat oude rapportages kloppen?
+Sterke antwoordrichting:
+- Afdeling als SCD type 2 in de medewerkerdimensie.
+- Feiten koppelen aan de surrogate key die gold op de transactiedatum.
+- Zo blijven historische cijfers per afdeling correct.
+
+Snelle controlevragen:
+- V: Wat doet SCD type 1? A: Oude waarde overschrijven, geen historie.
+- V: Wat doet SCD type 2? A: Nieuwe rij per wijziging met geldigheidsperiode.
+- V: Waarom heb je bij SCD2 een surrogate key nodig? A: Omdat dezelfde business key meerdere rijen heeft.
+
+Waarom dit telt bij CureLytics: historie en correctheid zijn cruciaal bij publieke klanten (verantwoording, audits).
+
+### 005 — Data Vault 2.0
+
+Kern: Data Vault is een modelleermethode voor de integratielaag die data opsplitst in Hubs (sleutels), Links (relaties) en Satellites (beschrijvingen + historie).
+
+Visual: Kolommen: Hub: Business key; bv. klantnummer; Verandert nooit | Link: Relatie tussen hubs; bv. klant–order; Veel-op-veel | Satellite: Attributen; Volledige historie; Per bron/tempo
+Toelichting: Data Vault = flexibele, auditeerbare opslag. Daarbóvenop bouw je Kimball-sterren voor rapportage.
+
+Extra visual: Centraal begrip Link Klant–Order, met daaromheen: Hub Klant; Sat Klant (adres); Hub Order; Sat Order (status)
+Toelichting: Mini Data Vault: twee hubs verbonden door een link, elk met een satellite.
+Extra visual: Lagen, van boven (dichtst bij de gebruiker) naar onder: Information marts (Kimball) (Voor Power BI); Business Vault (regels) (Afgeleide berekeningen); Raw Vault (as-is) (Hubs, links, satellites); Staging (Ruwe bron)
+Toelichting: Data Vault-architectuur: rapporteren gebeurt altijd via marts erbovenop.
+
+Junior-niveau (de basis):
+- Hub: unieke lijst van business keys (klantnummer, BSN-hash, productcode).
+- Link: legt verbanden vast tussen hubs.
+- Satellite: alle beschrijvende velden, met laaddatum → automatisch historie.
+- Elke rij heeft: hash key, load date, record source.
+
+Senior-niveau (verdieping):
+- Voordelen: makkelijk nieuwe bronnen toevoegen, volledig auditeerbaar, parallel laden (hash keys).
+- Nadelen: veel tabellen, complexe queries → altijd een information mart (Kimball) erbovenop.
+- Raw Vault (as-is uit bron) vs Business Vault (afgeleide regels).
+- Automatisering: dbt-pakketten (AutomateDV/datavault4dbt), VaultSpeed, WhereScape.
+
+Praktijkvoorbeeld:
+Een provincie krijgt elk jaar nieuwe bronnen (subsidiesysteem, GIS, HR). In Data Vault voeg je per bron satellites toe aan bestaande hubs – het bestaande model hoeft niet om. En bij een audit kun je per veld aantonen uit welke bron en op welk moment het geladen is.
+
+Begrippen:
+- Hash key: Sleutel berekend als hash van de business key – maakt parallel laden mogelijk.
+- Load date: Moment waarop een record geladen is.
+- Record source: Uit welk systeem het record komt.
+- PIT-tabel: Point-in-time hulptabel om satellites snel te combineren.
+- Bridge: Hulptabel om links over meerdere hubs te versnellen.
+
+Voorbeeldtabel ( | Kimball | Data Vault):
+- Doel | Rapportage, snel en begrijpelijk | Integratie, flexibel en auditeerbaar
+- Nieuwe bron | Model aanpassen | Satellites toevoegen
+- Queries | Eenvoudig | Complex (veel joins)
+- Historie | Via SCD | Standaard in satellites
+
+Veelgemaakte fouten:
+- Power BI direct op de Raw Vault zetten – veel te complex en traag.
+- Business keys verkeerd kiezen (bv. een technisch ID dat per bron verschilt).
+- Data Vault inzetten voor een klein project met één stabiele bron.
+
+Ezelsbruggetje: H-L-S: de Hub is het wie, de Link het verband, de Satellite het verhaal.
+
+Oefenvraag uit een sollicitatiegesprek: Wanneer kies je voor Data Vault in plaats van direct Kimball?
+Sterke antwoordrichting:
+- Veel bronnen die vaak veranderen of erbij komen.
+- Hoge eisen aan audit en historie (overheid, zorg, financiële sector).
+- Klein project met één bron? Dan is direct Kimball eenvoudiger.
+
+Snelle controlevragen:
+- V: Wat staat er in een hub? A: Unieke business keys (+ hash key, load date, record source).
+- V: Wat staat er in een satellite? A: Beschrijvende attributen met volledige historie.
+- V: Wat is een link? A: Een relatie tussen twee of meer hubs.
+- V: Wat zet je bovenop de vault voor rapportage? A: Information marts in Kimball-stervorm.
+
+Waarom dit telt bij CureLytics: Data Vault 2.0 staat in de senior BI- en senior DE-vacature – typisch voor publieke organisaties.
+
+### 006 — Power BI-architectuur
+
+Kern: Power BI bestaat uit Power Query (data ophalen/opschonen), het datamodel + DAX, het rapport en de Power BI Service (delen, verversen, beveiligen).
+
+Visual: Stappen: Bronnen → Power Query (M-taal) → Datamodel + DAX → Rapport (visuals) → Service (workspace/app)
+Toelichting: Power BI Desktop = bouwen (stap 2–4). Service = publiceren, delen, refresh, RLS.
+
+Extra visual: Vergelijking. Import: Data in geheugen (VertiPaq); Zeer snel; Refresh nodig. Tegenover DirectQuery: Live query naar bron; Altijd actueel; Trager, bron belast.
+Toelichting: De belangrijkste opslagkeuze in Power BI. (Fabric voegt Direct Lake toe: snel én actueel.)
+Extra visual: Workspace vertakt in: Semantisch model (Tabellen & relaties, Measures, RLS-rollen); Rapporten (Pagina's, Visuals); App (Voor eindgebruikers, Audiences)
+Toelichting: Hoe content in de Power BI Service is georganiseerd.
+
+Junior-niveau (de basis):
+- Import (data in geheugen, snel) vs DirectQuery (live naar bron) vs Direct Lake (Fabric).
+- Relaties: bij voorkeur één-op-veel, filterrichting enkelvoudig.
+- Gateway nodig voor on-premise bronnen bij geplande refresh.
+- Workspaces → Apps om rapporten aan eindgebruikers te geven.
+
+Senior-niveau (verdieping):
+- Row-Level Security (RLS): rollen met DAX-filters, bv. alleen eigen regio.
+- Gedeelde semantische modellen (datasets) + certificering → één waarheid, veel rapporten.
+- Prestaties: ster-schema, kolommen beperken, aggregaties, incremental refresh.
+- Deployment pipelines (dev/test/prod), Git-integratie, Fabric-capaciteit en licenties (Pro/PPU/Fabric).
+
+Praktijkvoorbeeld:
+Een gemeente wil dat elk wijkteam alleen eigen cijfers ziet. Oplossing: één semantisch model met een RLS-rol [Wijk] = USERPRINCIPALNAME()-mapping via een autorisatietabel. Eén rapport, tien wijkteams, ieder ziet alleen zijn eigen data.
+
+Begrippen:
+- Power Query (M): Taal/tool om data op te halen en te transformeren.
+- VertiPaq: In-memory kolomengine achter Import-modus.
+- Gateway: Brug tussen Power BI Service en on-premise bronnen.
+- RLS: Row-Level Security: rijen filteren per gebruiker/rol.
+- Incremental refresh: Alleen recente partities verversen.
+
+Codevoorbeeld (DAX):
+-- RLS-rol 'Wijkteam' op de tabel Autorisatie
+[E-mail] = USERPRINCIPALNAME()
+
+-- Autorisatie (E-mail, Wijk) heeft een relatie met dim_Wijk,
+-- zodat het filter doorloopt naar alle feiten.
+
+Veelgemaakte fouten:
+- Bidirectionele relaties overal aanzetten → ambigue modellen en trage queries.
+- Elk rapport een eigen kopie van het model geven (geen single source of truth).
+- Hele tabellen met tientallen ongebruikte kolommen importeren.
+
+Ezelsbruggetje: Q-M-R-S: Query, Model, Rapport, Service – 'Quick Model, Rapid Sharing'.
+
+Oefenvraag uit een sollicitatiegesprek: Een Power BI-rapport is traag. Wat doe je?
+Sterke antwoordrichting:
+- Meten: Performance Analyzer, DAX Studio – zit het in visuals, DAX of model?
+- Model: ster-schema, overbodige kolommen weg, kardinaliteit verlagen.
+- DAX optimaliseren, aggregaties of incremental refresh; minder visuals per pagina.
+
+Snelle controlevragen:
+- V: Import vs DirectQuery? A: Import = data in geheugen, snel; DirectQuery = live naar bron, actueel maar trager.
+- V: Waarvoor dient een gateway? A: Om vanuit de Service on-premise bronnen te verversen.
+- V: Wat is RLS? A: Row-Level Security: per rol/gebruiker alleen bepaalde rijen tonen.
+- V: Welke certificering hoort bij Power BI? A: PL-300 (Power BI Data Analyst).
+
+Waarom dit telt bij CureLytics: Power BI is de rode draad in alle BI-vacatures; certificering (PL-300) is een plus.
+
+### 007 — DAX: measures en filtercontext
+
+Kern: DAX is de formuletaal van Power BI; een measure rekent op het moment van tonen, binnen de filtercontext die de gebruiker (via filters en visuals) bepaalt.
+
+Visual: Stappen: Slicer + rijkop + paginafilter → Filtercontext jaar=2026, Noord → Measure Totaal Omzet → Resultaat voor die cel
+Toelichting: Slicer (jaar = 2026) + rijkop in de visual (regio = Noord) + pagina-/rapportfilters vormen samen de filtercontext. Dezelfde measure geeft per cel een ander antwoord.
+
+Extra visual: Vergelijking. Measure: Berekend bij tonen; Reageert op filters; Geen opslag. Tegenover Calculated column: Berekend bij refresh; Per rij vast; Kost geheugen.
+Toelichting: Vuistregel: aggregaties zijn measures; kolommen alleen als je erop wilt filteren/groeperen.
+Extra visual: Stappen: Bestaande filtercontext → CALCULATE wijzigt filters → Expressie evalueren → Resultaat
+Toelichting: Wat CALCULATE doet: filters toevoegen, vervangen of verwijderen vóór de berekening.
+
+Junior-niveau (de basis):
+- Measure (dynamisch, berekend bij tonen) vs calculated column (per rij, opgeslagen bij refresh).
+- Basis: SUM, COUNTROWS, DIVIDE (veilig delen), DISTINCTCOUNT.
+- Totaal Omzet = SUM(Verkoop[Bedrag])
+- Maak een aparte datumtabel en markeer die als date table.
+
+Senior-niveau (verdieping):
+- CALCULATE wijzigt de filtercontext – de belangrijkste functie in DAX.
+- Row context (iterators: SUMX, FILTER) vs filter context; context transition.
+- Time intelligence: TOTALYTD, SAMEPERIODLASTYEAR, DATEADD.
+- VAR voor leesbaarheid en prestaties; ALL/REMOVEFILTERS voor percentages van totaal.
+
+Praktijkvoorbeeld:
+Een controller wil '% van totaal' per afdeling. Met DIVIDE([Kosten], CALCULATE([Kosten], REMOVEFILTERS(Afdeling))) blijft het totaal in de noemer gelijk, ongeacht welke afdeling in de rij staat – maar andere filters (zoals het jaar) blijven wel werken.
+
+Begrippen:
+- Filtercontext: Alle filters die op een cel van toepassing zijn.
+- Rijcontext: De 'huidige rij' tijdens een iteratie (SUMX, kolommen).
+- Context transition: CALCULATE zet rijcontext om in filtercontext.
+- Iterator: Functie die rij voor rij rekent (SUMX, AVERAGEX).
+- Time intelligence: Functies voor YTD, vorig jaar, etc.
+
+Codevoorbeeld (DAX):
+Totaal Omzet = SUM ( Verkoop[Bedrag] )
+
+Omzet VJ =
+CALCULATE ( [Totaal Omzet], SAMEPERIODLASTYEAR ( 'Datum'[Datum] ) )
+
+Groei % =
+VAR Nu = [Totaal Omzet]
+VAR Vj = [Omzet VJ]
+RETURN DIVIDE ( Nu - Vj, Vj )
+
+% van totaal =
+DIVIDE ( [Totaal Omzet], CALCULATE ( [Totaal Omzet], REMOVEFILTERS ( Product ) ) )
+
+Veelgemaakte fouten:
+- Calculated columns gebruiken voor sommen die een measure hadden moeten zijn.
+- Delen met / in plaats van DIVIDE → fouten bij delen door nul.
+- Time intelligence zonder aaneengesloten, gemarkeerde datumtabel.
+
+Ezelsbruggetje: CALCULATE = 'Calculeer, maar dan met mijn filters'. Measure = Meet nu, kolom = Kolom vooraf.
+
+Oefenvraag uit een sollicitatiegesprek: Hoe bereken je de omzetgroei ten opzichte van vorig jaar?
+Sterke antwoordrichting:
+- Omzet VJ = CALCULATE([Totaal Omzet], SAMEPERIODLASTYEAR('Datum'[Datum]))
+- Groei % = DIVIDE([Totaal Omzet] - [Omzet VJ], [Omzet VJ])
+- Voorwaarde: een goede, gemarkeerde datumtabel.
+
+Snelle controlevragen:
+- V: Measure of calculated column voor 'totale omzet'? A: Measure.
+- V: Wat doet CALCULATE? A: Een expressie evalueren in een aangepaste filtercontext.
+- V: Waarom DIVIDE? A: Veilig delen: geen fout bij delen door nul.
+- V: Wat is het verschil tussen SUM en SUMX? A: SUM telt een kolom op; SUMX rekent per rij een expressie en telt die op.
+
+Waarom dit telt bij CureLytics: 'Sterke vaardigheden in SQL, DAX' is een harde eis in de medior BI-vacature.
+
+### 008 — SQL essentials
+
+Kern: SQL is dé taal om data op te vragen en te bewerken: selecteren, filteren, koppelen (JOIN), groeperen en aggregeren.
+
+Visual: Stappen: FROM / JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY
+Toelichting: De logische volgorde waarin een database een query uitvoert (niet de volgorde waarin je hem schrijft).
+
+Extra visual: Overlappende gebieden: Tabel A, Tabel B; in de overlap: INNER JOIN
+Toelichting: INNER JOIN = de overlap. LEFT JOIN = heel A plus de overlap.
+Extra visual: Kolommen: ROW_NUMBER: 1, 2, 3, 4; Altijd uniek | RANK: 1, 2, 2, 4; Gaten na gelijk | DENSE_RANK: 1, 2, 2, 3; Geen gaten
+Toelichting: Drie ranking-window functions – populaire interviewvraag.
+
+Junior-niveau (de basis):
+- INNER JOIN: alleen matches. LEFT JOIN: alles links + matches rechts.
+- WHERE filtert rijen vóór groeperen, HAVING filtert groepen erna.
+- Aggregaties: COUNT, SUM, AVG, MIN, MAX met GROUP BY.
+- NULL is 'onbekend': gebruik IS NULL, niet = NULL.
+
+Senior-niveau (verdieping):
+- Window functions: ROW_NUMBER() OVER (PARTITION BY … ORDER BY …) voor dedupliceren, rankings, lopende totalen.
+- CTE's (WITH) voor leesbare, stapsgewijze queries.
+- Prestaties: indexen/partitionering, execution plan lezen, SELECT * vermijden.
+- MERGE voor upserts en SCD's; let op set-based denken i.p.v. cursors.
+
+Praktijkvoorbeeld:
+Een bron levert dubbele klantrecords (dezelfde klant, meerdere updates). Met ROW_NUMBER() OVER (PARTITION BY klant_nr ORDER BY gewijzigd_op DESC) houd je per klant alleen de nieuwste rij over – een standaardpatroon in elke staging-laag.
+
+Begrippen:
+- JOIN: Tabellen combineren op een sleutel.
+- Aggregatie: Samenvatten: SUM, COUNT, AVG…
+- Window function: Berekening over een groep rijen zonder ze samen te voegen.
+- CTE: Common Table Expression: tijdelijke benoemde subquery (WITH).
+- Index: Structuur die zoeken versnelt.
+
+Codevoorbeeld (SQL):
+WITH geordend AS (
+    SELECT o.*,
+           ROW_NUMBER() OVER (PARTITION BY klant_id ORDER BY orderdatum DESC) AS rn,
+           SUM(bedrag)  OVER (PARTITION BY klant_id ORDER BY orderdatum
+                              ROWS UNBOUNDED PRECEDING)                  AS lopend_totaal
+    FROM   orders o
+)
+SELECT klant_id, orderdatum, bedrag, lopend_totaal
+FROM   geordend
+WHERE  rn = 1;          -- meest recente order per klant
+
+Veelgemaakte fouten:
+- WHERE kolom = NULL schrijven (moet IS NULL zijn).
+- Een LEFT JOIN ongemerkt een INNER JOIN maken door in de WHERE op de rechtertabel te filteren.
+- Joinen op niet-unieke sleutels → rijen vermenigvuldigen.
+
+Ezelsbruggetje: F-W-G-H-S-O: 'Frisse Wortels Groeien Het Snelst Ongeschild' – de uitvoervolgorde.
+
+Oefenvraag uit een sollicitatiegesprek: Hoe vind je per klant de meest recente order?
+Sterke antwoordrichting:
+- ROW_NUMBER() OVER (PARTITION BY klant_id ORDER BY orderdatum DESC) AS rn
+- In een CTE, daarna WHERE rn = 1.
+- Alternatief: join op MAX(orderdatum) per klant – maar let op dubbele datums.
+
+Snelle controlevragen:
+- V: Verschil WHERE en HAVING? A: WHERE filtert rijen vóór groeperen, HAVING filtert groepen erna.
+- V: Verschil RANK en DENSE_RANK? A: RANK laat gaten na gelijke waarden, DENSE_RANK niet.
+- V: Hoe ontdubbel je records? A: ROW_NUMBER() OVER (PARTITION BY sleutel ORDER BY datum DESC) en rn = 1 houden.
+- V: Wat is de logische uitvoervolgorde? A: FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.
+
+Waarom dit telt bij CureLytics: SQL is de basis onder elke rol – reken op een SQL-vraag of -oefening in het technische gesprek.
+
+### 009 — Cloud datawarehouses
+
+Kern: Moderne warehouses als Azure Synapse, Microsoft Fabric, Snowflake, AWS Redshift en Databricks SQL scheiden opslag en rekenkracht, zodat je onafhankelijk kunt schalen.
+
+Visual: Lagen, van boven (dichtst bij de gebruiker) naar onder: BI-tools (Power BI, Tableau) (Gebruikers & rapporten); Compute (virtual warehouse / SQL pool) (Schaalt op/af, betaal per gebruik); Opslag (kolomgebaseerd, cloud-objectopslag) (Goedkoop, onbeperkt)
+Toelichting: Gescheiden opslag en compute: het kernidee achter alle cloud-DWH's.
+
+Extra visual: Microsoft Fabric vertakt in: OneLake (Eén data lake, Delta-formaat); Engines (Lakehouse (Spark), Warehouse (SQL)); Power BI (Direct Lake, Semantische modellen)
+Toelichting: Fabric in één plaatje: alle engines op één lake.
+
+Junior-niveau (de basis):
+- Synapse: Microsofts analytics-platform (dedicated/serverless SQL pools).
+- Fabric: Microsofts nieuwe alles-in-één (OneLake, lakehouse, warehouse, Power BI).
+- Snowflake: cloud-onafhankelijk, virtual warehouses, makkelijk delen van data.
+- Redshift: AWS-warehouse (scheiding opslag/compute via RA3-nodes of Serverless). Opslag is kolomgebaseerd → snel aggregeren.
+
+Senior-niveau (verdieping):
+- Keuzecriteria: bestaand ecosysteem (Microsoft?), kosten­model, governance, skills van het team.
+- Fabric vervangt in veel Microsoft-omgevingen geleidelijk Synapse – migratiepaden kennen.
+- Snowflake-features: time travel, zero-copy cloning, data sharing.
+- Kosten: auto-suspend, juiste warehousegrootte, partitionering/clustering.
+
+Praktijkvoorbeeld:
+Een onderwijsinstelling met Microsoft 365 en Power BI Pro twijfelt tussen Snowflake en Fabric. Na een proof-of-concept van twee weken kiest ze Fabric: alles in één licentie, Direct Lake maakt rapporten snel zonder imports, en het team kent de Microsoft-tools al.
+
+Begrippen:
+- MPP: Massively Parallel Processing: query verdeeld over veel nodes.
+- Virtual warehouse: Snowflake-compute-cluster dat je los aan/uit zet.
+- OneLake: Het centrale data lake van Microsoft Fabric.
+- Direct Lake: Power BI leest Delta-bestanden direct, zonder import.
+- Zero-copy clone: Snowflake: kopie van een tabel zonder data te dupliceren.
+
+Voorbeeldtabel (Platform | Sterk in | Let op):
+- Azure Synapse | Bestaande Azure-omgevingen | Microsoft verschuift focus naar Fabric
+- Microsoft Fabric | Alles-in-één + Power BI | Jong product, capaciteitslicenties
+- Snowflake | Eenvoud, multi-cloud, data sharing | Aparte licentie, kosten bewaken
+- AWS Redshift | AWS-ecosysteem | Scheiding opslag/compute via RA3/Serverless
+- Databricks SQL | Lakehouse + ML | Meer engineering-gericht
+
+Veelgemaakte fouten:
+- Een warehouse kiezen op basis van hype in plaats van ecosysteem en skills.
+- Compute niet laten auto-pauzeren → onverwachte rekeningen.
+- Vergeten dat migreren tussen platformen tijd en geld kost (lock-in).
+
+Ezelsbruggetje: Opslag = koelkast (altijd aan, goedkoop), compute = fornuis (alleen aan als je kookt).
+
+Oefenvraag uit een sollicitatiegesprek: Een klant twijfelt tussen Fabric en Snowflake. Wat adviseer je?
+Sterke antwoordrichting:
+- Vragen: welk ecosysteem, licenties, skills, governance-eisen, multi-cloud nodig?
+- Microsoft-huis met Power BI → Fabric ligt voor de hand (integratie, OneLake).
+- Multi-cloud of veel data sharing → Snowflake. Maak een kleine proof-of-concept.
+
+Snelle controlevragen:
+- V: Wat is het kernidee van cloud-DWH's? A: Opslag en compute gescheiden, onafhankelijk schalen.
+- V: Wat is OneLake? A: Het centrale data lake van Microsoft Fabric.
+- V: Wat is Direct Lake? A: Power BI-modus die Delta-bestanden direct leest: snel én actueel.
+- V: Wanneer Snowflake? A: Multi-cloud, veel data sharing, of geen Microsoft-ecosysteem.
+
+Waarom dit telt bij CureLytics: vacatures noemen Synapse, Redshift, Snowflake én Azure Fabric – laat zien dat je de afweging kunt maken.
+
+### 010 — Dashboard design en KPI-rapportage
+
+Kern: Een goed dashboard beantwoordt in 5 seconden de belangrijkste vraag van één doelgroep: belangrijkste KPI linksboven, details pas bij doorklikken.
+
+Visual: Lagen, van boven (dichtst bij de gebruiker) naar onder: KPI-kaarten (status in één oogopslag) (Hoe staan we ervoor?); Trends & vergelijkingen (grafieken) (Waarom? Waar wijkt het af?); Details (tabellen, drill-through) (Welke gevallen precies?)
+Toelichting: Van overzicht naar detail (Shneiderman: overview first, zoom and filter, details on demand).
+
+Extra visual: 2x2-matrix (horizontaal: leesrichting →; verticaal: belang ↑). Linksboven: Belangrijkste KPI. Rechtsboven: Trend / vergelijking. Linksonder: Verdeling (staaf). Rechtsonder: Detailtabel (drill).
+Toelichting: Z-patroon: mensen lezen linksboven eerst – zet daar het belangrijkste getal.
+Extra visual: Kolommen: Trend: Lijndiagram | Vergelijken: Staafdiagram | Deel v. geheel: Gestapelde staaf | Eén getal: KPI-kaart
+Toelichting: Welke grafiek bij welke vraag.
+
+Junior-niveau (de basis):
+- Ken je doelgroep: bestuurder wil overzicht, analist wil detail.
+- Juiste grafiek: lijn = trend, staaf = vergelijken, kaart/KPI = één getal; vermijd taart met 8 stukken.
+- Context: target, vorig jaar, verschil – een getal alleen zegt niets.
+- Consistente kleuren; rood/groen alleen voor slecht/goed.
+
+Senior-niveau (verdieping):
+- SMART KPI's samen met de business definiëren en vastleggen (KPI-definitiedocument).
+- Leading (voorspellend) vs lagging (achteraf) indicatoren.
+- Toegankelijkheid (kleurenblindheid, contrast) – verplicht bij overheid (WCAG).
+- Adoptie meten: usage metrics in Power BI; ongebruikte rapporten opruimen.
+
+Praktijkvoorbeeld:
+Voor een zorgbestuurder: bovenaan drie KPI-kaarten (bezetting, wachtlijst, verzuim) met kleur ten opzichte van target. Daaronder per KPI een trendlijn over 13 maanden. Pas na doorklikken de tabel per afdeling. De bestuurder heeft in 5 seconden het antwoord op 'staan we ervoor zoals afgesproken?'
+
+Begrippen:
+- SMART: Specifiek, Meetbaar, Acceptabel, Realistisch, Tijdgebonden.
+- Leading indicator: Voorspelt toekomstig resultaat (bv. aantal aanmeldingen).
+- Lagging indicator: Meet achteraf (bv. omzet).
+- Drill-through: Doorklikken naar een detailpagina met hetzelfde filter.
+- WCAG: Richtlijnen voor digitale toegankelijkheid.
+
+Veelgemaakte fouten:
+- Taartdiagrammen met veel stukjes.
+- Getallen zonder context (target, vorig jaar).
+- Rood/groen als enige onderscheid → onleesbaar voor kleurenblinden.
+
+Ezelsbruggetje: 5-3-1: binnen 5 seconden het antwoord, max 3 kernvragen, 1 doelgroep per dashboard.
+
+Oefenvraag uit een sollicitatiegesprek: Een wethouder wil een dashboard over de jeugdzorg. Hoe begin je?
+Sterke antwoordrichting:
+- Interview: welke beslissingen neemt de wethouder? Welke 3–5 KPI's horen daarbij?
+- Schets (wireframe) eerst op papier en valideer.
+- Dan pas data verkennen, bouwen in iteraties; AVG: geaggregeerd, geen herleidbare cliënten.
+
+Snelle controlevragen:
+- V: Waar plaats je de belangrijkste KPI? A: Linksboven.
+- V: Welke grafiek voor een trend? A: Een lijndiagram.
+- V: Leading vs lagging? A: Leading voorspelt, lagging meet achteraf.
+- V: Wat betekent de 5-3-1-regel? A: Antwoord binnen 5 seconden, max 3 kernvragen, 1 doelgroep.
+
+Waarom dit telt bij CureLytics: veel publieke klanten: bestuurders en managers als eindgebruikers.
+
+### 011 — Impact- en gap-analyse
+
+Kern: Een gap-analyse vergelijkt de huidige situatie met de gewenste situatie; een impactanalyse bepaalt wat een wijziging raakt (data, rapporten, processen, mensen).
+
+Visual: Stappen: IST (huidig) —(analyseren)→ GAP (wat ontbreekt?) —(acties)→ SOLL (gewenst)
+Toelichting: Gap = de verzameling acties om van huidig naar gewenst te komen.
+
+Extra visual: Stappen: Bronkolom wijzigt → Pipeline stg_klant → Model dim_klant → 3 rapporten 12 gebruikers
+Toelichting: Impactanalyse via lineage: één wijziging, veel afnemers.
+Extra visual: 2x2-matrix (horizontaal: waarde →; verticaal: moeite ↑). Linksboven: Vermijden. Rechtsboven: Grote projecten (plannen). Linksonder: Opvullers. Rechtsonder: Quick wins (eerst doen!).
+Toelichting: Gaps prioriteren op waarde en moeite: quick wins (veel waarde, weinig moeite) zitten rechtsonder.
+
+Junior-niveau (de basis):
+- IST/SOLL (Duits) = as-is/to-be.
+- Gap-analyse voorbeeld: welke KPI's wil men, welke data is er al, wat mist?
+- Impactanalyse voorbeeld: een bronkolom wordt hernoemd → welke pipelines en rapporten breken?
+- Leg resultaten vast in een simpele tabel: onderwerp, huidig, gewenst, gap, actie.
+
+Senior-niveau (verdieping):
+- Gebruik data lineage (Purview, dbt docs) om impact automatisch in kaart te brengen.
+- Prioriteer gaps op waarde vs moeite.
+- Ook organisatorische gaps: skills, eigenaarschap, processen – niet alleen techniek.
+- Communiceer impact vóór de wijziging naar alle afnemers (change management).
+
+Praktijkvoorbeeld:
+Bij de overstap naar een nieuw HR-systeem maakt de BI-specialist een mappingtabel van 140 velden. 12 velden hebben geen equivalent: dat zijn de gaps. Drie ervan raken de verzuim-KPI – die krijgen prioriteit en worden met de business opgelost vóór de livegang.
+
+Begrippen:
+- IST / SOLL: Huidige / gewenste situatie.
+- Lineage: De herkomst en route van data.
+- Mapping: Koppeling van oude naar nieuwe velden.
+- Reconciliatie: Cijfers van oud en nieuw vergelijken tot ze kloppen.
+
+Voorbeeldtabel (Onderwerp | Huidig | Gewenst | Gap | Actie):
+- Verzuim-KPI | Maandelijks in Excel | Dagelijks in Power BI | Geen pipeline | ADF + model bouwen
+- Definitie | Per afdeling anders | Eén definitie | Geen afspraak | KPI-sessie met HR
+- Toegang | Iedereen alles | Per afdeling | Geen RLS | RLS-rollen inrichten
+
+Veelgemaakte fouten:
+- Alleen naar techniek kijken en organisatorische gaps vergeten.
+- Afnemers niet informeren vóór een wijziging.
+- Geen reconciliatie doen na een migratie.
+
+Ezelsbruggetje: IST – GAP – SOLL: 'Ik Sta… Ga… Straks Overal Live'.
+
+Oefenvraag uit een sollicitatiegesprek: Een bronsysteem wordt vervangen. Hoe breng je de impact op BI in kaart?
+Sterke antwoordrichting:
+- Lineage: welke tabellen/velden gebruiken we uit het oude systeem, in welke rapporten?
+- Mapping oud → nieuw veld per veld; gaps markeren.
+- Plan: parallel draaien, cijfers reconciliëren, gebruikers informeren.
+
+Snelle controlevragen:
+- V: Wat is een gap-analyse? A: Vergelijking huidig vs gewenst, met acties om het verschil te dichten.
+- V: Wat is een impactanalyse? A: Bepalen wat een wijziging raakt: data, rapporten, processen, mensen.
+- V: Welke tool helpt bij impactanalyse? A: Data lineage (bv. Purview, dbt docs).
+
+Waarom dit telt bij CureLytics: 'Impact- en gap-analyses uitvoeren' staat in de medior BI-vacature.
+
+### 012 — Senior: BI-strategie, migratie en coaching
+
+Kern: Als senior adviseer je over de BI-strategie en architectuur, leid je cloudmigraties en coach je junior en medior consultants.
+
+Visual: Centraal begrip Senior BI consultant, met daaromheen: Strategie & roadmap; Dataarchitectuur; Cloudmigratie; Projectleiding; Coaching; Stakeholdermanagement
+Toelichting: De senior rol: breder dan bouwen – sturen, adviseren en anderen beter maken.
+
+Extra visual: Stappen: Ad-hoc (Excel) → Gestandaardiseerd → Centraal model → Selfservice → Voorspellend
+Toelichting: BI-volwassenheid: waar staat de klant, wat is de volgende stap?
+Extra visual: Tijdlijn: Inventariseren (rapporten & bronnen) → Rationaliseren (wat kan weg?) → Bouwen (per domein) → Reconciliëren (cijfers vergelijken) → Uitfaseren (oud uit)
+Toelichting: Aanpak van een BI-migratie (bv. SSRS/SSAS → Power BI/Fabric).
+
+Junior-niveau (de basis):
+- Weet wat een senior doet, zodat je weet waar je naartoe groeit.
+- Vraag in het gesprek naar coaching/buddy-structuur.
+- Laat zien dat je feedback zoekt en wilt leren (opleidingsbudget!).
+- Ken de stappen van een migratie op hoofdlijnen: inventariseren → ontwerpen → migreren → valideren.
+
+Senior-niveau (verdieping):
+- BI-maturity bepalen (bv. van ad-hoc Excel → gestandaardiseerd → self-service → voorspellend).
+- Migratie on-prem (SSIS/SSAS/SSRS) → Azure/Fabric: inventaris, rationaliseren, gefaseerd, reconciliatie.
+- Governance: naming conventions, certificering, CoE (Center of Excellence).
+- Coaching: code reviews, pair-programming, kennissessies; stakeholders tot directieniveau.
+
+Praktijkvoorbeeld:
+Een organisatie heeft 600 SSRS-rapporten. Na inventarisatie blijkt 40% al een jaar niet geopend. Die worden niet gemigreerd. De rest wordt per domein omgezet naar Power BI op gedeelde, gecertificeerde modellen. Een medior consultant bouwt; de senior reviewt, bewaakt de standaarden en rapporteert aan de stuurgroep.
+
+Begrippen:
+- CoE: Center of Excellence: team dat BI-standaarden en kennis bewaakt.
+- Maturity model: Model om volwassenheid in stappen te beschrijven.
+- Rationaliseren: Opruimen: alleen migreren wat waarde heeft.
+- Stuurgroep: Overleg waar opdrachtgevers besluiten nemen over het project.
+
+Veelgemaakte fouten:
+- Alles 1-op-1 migreren, inclusief rapporten die niemand gebruikt.
+- Als senior zelf al het bouwwerk doen in plaats van het team te laten groeien.
+- Standaarden pas achteraf afspreken.
+
+Ezelsbruggetje: ADMC: Adviseren, Designen, Migreren, Coachen.
+
+Oefenvraag uit een sollicitatiegesprek: Hoe zou je een organisatie van Excel-rapportages naar een volwassen BI-omgeving brengen?
+Sterke antwoordrichting:
+- Start klein: één afdeling, één waardevol dashboard, quick win.
+- Leg fundament: centraal datamodel, KPI-definities, governance.
+- Schaal op met self-service en training; meet adoptie.
+
+Snelle controlevragen:
+- V: Noem de stappen van een BI-migratie. A: Inventariseren, rationaliseren, bouwen, reconciliëren, uitfaseren.
+- V: Wat is een CoE? A: Center of Excellence dat standaarden, kennis en governance bewaakt.
+- V: Wat zijn de vier senior-taken (ADMC)? A: Adviseren, designen, migreren, coachen.
+
+Waarom dit telt bij CureLytics: de senior-vacature vraagt 5+ jaar BI in de cloud, projectleiding en coaching.

@@ -12,6 +12,7 @@ Data & Analytics detachering. Vacatures: https://curelytics.nl/onze-vacatures/
 | `_generator/content_<map>.py` | `FICHES`: kern per fiche (zin, hoofddiagram, junior, senior, ezel, vraag) |
 | `_generator/content_<map>_extra.py` | `EXTRA` (zelfde index): visuals, praktijk, begrippen, code, tabel, valkuilen, quiz |
 | `_generator/build.py` | Bouwt alles; `diagrams.py` = SVG-diagramtypes; `ui.css` / `ui.js` = opmaak en gedrag |
+| `_generator/export_notebooklm.py` | Maakt `_generator/notebooklm-<map>.txt` (één per rol) als bron voor NotebookLM-video's; opnieuw draaien na inhoudswijziging |
 | `Lavish-Claude.bat` + `_tools/lavish-claude.ps1` | Opent de gids in Lavish en stuurt elke feedback naar `claude -p` |
 | `_bronnen/` | Clones van `kunchenguid/kun` en `kunchenguid/lavish-axi` (alleen lezen) |
 
