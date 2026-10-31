@@ -161,6 +161,8 @@ body.app .pager.hidden{display:none}
 .viz{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0}
 .viz svg{width:100%;height:auto;max-height:72vh;display:block}
 .viz{position:relative}
+.viz svg{cursor:zoom-in}
+.zoom-body{cursor:zoom-out}
 .zoom-btn{position:absolute;top:10px;right:10px;z-index:1;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
   background:color-mix(in srgb,var(--surface) 85%,transparent);color:var(--muted);font-size:17px;line-height:1;
   display:grid;place-items:center;opacity:.75;transition:opacity .15s,color .15s,border-color .15s,transform .15s}
@@ -382,7 +384,8 @@ WHERE  d.klant_nr IS NULL;</code></pre></div><div class="tbl"><table><thead><tr>
     $('.zoom-body', zoomBox).appendChild(svg.cloneNode(true));
     if (cap && cap.textContent.trim()) $('.zoom-cap', zoomBox).innerHTML = cap.innerHTML; else $('.zoom-cap', zoomBox).remove();
     zoomBox.addEventListener('click', function (ev) {
-      if (ev.target === zoomBox || ev.target.closest('[data-zoom-close]')) closeZoom();
+      // klik naast het venster, op ✕ of op de vergrote visual zelf = sluiten
+      if (ev.target === zoomBox || ev.target.closest('[data-zoom-close]') || ev.target.closest('.zoom-body')) closeZoom();
     });
     document.body.appendChild(zoomBox);
     document.body.classList.add('zoomed');
@@ -390,7 +393,10 @@ WHERE  d.klant_nr IS NULL;</code></pre></div><div class="tbl"><table><thead><tr>
   }
   document.addEventListener('click', function (ev) {
     var b = ev.target.closest('[data-zoom]');
-    if (b) openZoom(b.closest('figure'), b);
+    if (b) return openZoom(b.closest('figure'), b);
+    // klik op de visual zelf vergroot ook
+    var svg = ev.target.closest('figure.viz svg');
+    if (svg) openZoom(svg.closest('figure'), $('[data-zoom]', svg.closest('figure')));
   });
   document.addEventListener('keydown', function (ev) {
     if (zoomBox && ev.key === 'Escape') { ev.preventDefault(); closeZoom(); }

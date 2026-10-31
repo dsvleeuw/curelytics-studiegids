@@ -92,7 +92,8 @@
     $('.zoom-body', zoomBox).appendChild(svg.cloneNode(true));
     if (cap && cap.textContent.trim()) $('.zoom-cap', zoomBox).innerHTML = cap.innerHTML; else $('.zoom-cap', zoomBox).remove();
     zoomBox.addEventListener('click', function (ev) {
-      if (ev.target === zoomBox || ev.target.closest('[data-zoom-close]')) closeZoom();
+      // klik naast het venster, op ✕ of op de vergrote visual zelf = sluiten
+      if (ev.target === zoomBox || ev.target.closest('[data-zoom-close]') || ev.target.closest('.zoom-body')) closeZoom();
     });
     document.body.appendChild(zoomBox);
     document.body.classList.add('zoomed');
@@ -100,7 +101,10 @@
   }
   document.addEventListener('click', function (ev) {
     var b = ev.target.closest('[data-zoom]');
-    if (b) openZoom(b.closest('figure'), b);
+    if (b) return openZoom(b.closest('figure'), b);
+    // klik op de visual zelf vergroot ook
+    var svg = ev.target.closest('figure.viz svg');
+    if (svg) openZoom(svg.closest('figure'), $('[data-zoom]', svg.closest('figure')));
   });
   document.addEventListener('keydown', function (ev) {
     if (zoomBox && ev.key === 'Escape') { ev.preventDefault(); closeZoom(); }
