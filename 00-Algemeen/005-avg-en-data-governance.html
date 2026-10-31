@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="nl" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>005 AVG &amp; data governance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script>try{var t=localStorage.getItem('cl-theme');if(t)document.documentElement.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark'}catch(_){}</script>
+<style>:root{
+  --brand:#1B9C85;--brand-2:#13b39a;--navy:#06307e;--navy-2:#1759d2;--on-brand:#ffffff;
+  --bg:#f3f6f5;--bg-2:#e9efed;--surface:#ffffff;--surface-2:#f7faf9;--soft:#eaf6f1;
+  --ink:#0d1726;--muted:#56616f;--line:#dde5e2;--line-2:#c9d4d0;
+  --hl:#d8f4ea;--warn:#fff6dc;--warn-ink:#6a4d00;--bad:#fdecec;--bad-ink:#9b1c1c;
+  --a0:#1B9C85;--a1:#1759d2;--a2:#7c3aed;--a3:#e0731b;
+  --shadow:0 1px 2px rgba(13,23,38,.06),0 8px 24px -12px rgba(13,23,38,.18);
+  --radius:18px;color-scheme:light}
+:root[data-theme="dark"]{
+  --brand:#2fd0b1;--brand-2:#5be3c8;--navy:#9cbcff;--navy-2:#6f9dff;--on-brand:#03211b;
+  --bg:#0a100f;--bg-2:#0f1716;--surface:#121b1a;--surface-2:#16211f;--soft:#14271f;
+  --ink:#e8f0ed;--muted:#9aa9a4;--line:#22312d;--line-2:#2d403b;
+  --hl:#173a30;--warn:#2b2412;--warn-ink:#f2d58c;--bad:#2c1616;--bad-ink:#ffb4b4;
+  --a0:#2fd0b1;--a1:#6f9dff;--a2:#b18cff;--a3:#ffa45c;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px -14px rgba(0,0,0,.7);color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Libre Franklin',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--navy-2)}
+code,pre{font-family:'JetBrains Mono',ui-monospace,monospace}
+:not(pre)>code{font-size:.88em;background:var(--soft);border:1px solid var(--line);padding:1px 6px;border-radius:6px;overflow-wrap:anywhere}
+button{font:inherit;color:inherit;cursor:pointer}
+.a0{--acc:var(--a0)}.a1{--acc:var(--a1)}.a2{--acc:var(--a2)}.a3{--acc:var(--a3)}
+
+/* ---------- app shell ---------- */
+body.app{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+/* Zijbalk scrollt mee met de pagina (geen eigen scrollbalk): zo blijft elke link bereikbaar, ook voor Lavish' layout-check.
+   Logo + zoekveld blijven vastgepind bovenaan. */
+.side{background:var(--surface);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;padding:0 14px 18px;gap:14px}
+.side-top{position:sticky;top:0;z-index:2;display:flex;flex-direction:column;gap:14px;padding:18px 0 12px;background:var(--surface)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand b{display:block;font-weight:800;letter-spacing:-.01em}.brand small{color:var(--muted);font-size:12px}
+.brand .icon-btn{margin-left:auto}.brand .icon-btn+.icon-btn{margin-left:0}
+.logo{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,var(--brand),var(--navy-2));box-shadow:var(--shadow);flex:none}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2)}
+.search{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.search:focus-within{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 20%,transparent)}
+.search input{border:0;background:transparent;outline:0;width:100%;font:inherit;color:var(--ink)}
+.nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.nav-top{padding:8px 10px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600}
+.nav-top:hover,.nav-top.on{background:var(--soft)}
+.nav-sec{margin-top:8px}
+.nav-h{width:100%;display:flex;align-items:center;gap:8px;background:none;border:0;padding:6px 8px;font-weight:800;font-size:13px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--acc)}
+.nav-h .ic{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--acc) 15%,transparent)}
+.nav-h .pr{margin-left:auto;font-size:11px;color:var(--muted);font-weight:700}
+.nav-sec.closed .nav-list{display:none}
+.nav-f{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:9px;text-decoration:none;color:var(--ink);font-size:14px}
+.nav-f .n{font-size:11px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav-f .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-f .k{opacity:0;color:var(--brand);font-weight:900}
+.nav-f.known .k{opacity:1}
+.nav-f:hover{background:var(--surface-2)}
+.nav-f.on{background:color-mix(in srgb,var(--acc) 14%,transparent);font-weight:700}
+.nav-f.on .n{color:var(--acc)}
+.nav-f.hide{display:none}
+.side-foot{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:12px;font-size:13px;color:var(--muted)}
+.ring{position:relative;width:46px;height:46px;flex:none}.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4}.ring .rb{stroke:var(--line)}.ring .rf{stroke:var(--brand);stroke-linecap:round;stroke-dasharray:97.4;stroke-dashoffset:97.4;transition:stroke-dashoffset .5s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;color:var(--ink)}
+.menu-btn{display:none}
+.main{min-width:0;padding:32px clamp(16px,4vw,56px) 80px;width:100%}
+/* inklapbare zijbalk (desktop); de inhoud groeit mee in de breedte */
+body.app{transition:grid-template-columns .25s ease}
+.side-open{display:none}
+@media (min-width:901px){
+  body.app.side-closed{grid-template-columns:minmax(0,1fr)}
+  body.side-closed .side{display:none}
+  body.side-closed .side-open{display:grid;place-items:center;position:fixed;top:14px;left:14px;z-index:30;width:40px;height:40px;
+    border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;box-shadow:var(--shadow)}
+  body.side-closed .side-open:hover{border-color:var(--brand);color:var(--brand)}
+  body.side-closed .main{padding-left:max(72px,clamp(16px,4vw,56px))}}
+@media (max-width:900px){[data-side-toggle]{display:none}}
+.view,.fiche{display:none}
+.view.on,.fiche.on{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:28px}
+.pager a{padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:var(--surface);text-decoration:none;font-weight:700;color:var(--ink)}
+.pager a:hover{border-color:var(--brand)}
+.pager a.off{visibility:hidden}.pager span{color:var(--muted);font-size:14px}
+body.app .pager.hidden{display:none}
+@media (max-width:900px){
+  body.app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;inset:0 auto 0 0;overflow:auto;width:min(320px,86vw);z-index:20;transform:translateX(-102%);transition:transform .25s;box-shadow:var(--shadow)}
+  body.menu .side{transform:none}
+  .menu-btn{display:grid;place-items:center;position:fixed;right:14px;bottom:14px;z-index:30;width:52px;height:52px;border-radius:16px;border:0;
+    background:linear-gradient(135deg,var(--brand),var(--navy-2));color:#fff;font-size:22px;box-shadow:var(--shadow)}
+  .main{padding-top:20px}}
+
+/* ---------- algemene componenten ---------- */
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.04em;padding:5px 11px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+.chip.sec{color:var(--acc,var(--brand));background:color-mix(in srgb,var(--acc,var(--brand)) 12%,var(--surface));border-color:transparent}
+.chip.lvl.j{color:var(--brand)}.chip.lvl.s{color:var(--navy-2)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:var(--surface);
+  font-weight:700;text-decoration:none;color:var(--ink);transition:transform .15s,border-color .15s}
+.btn:hover{transform:translateY(-1px);border-color:var(--brand)}
+.btn.primary{background:linear-gradient(135deg,var(--brand),color-mix(in srgb,var(--brand) 55%,var(--navy-2)));color:var(--on-brand);border-color:transparent}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);min-width:0}
+
+/* ---------- home ---------- */
+.home-hero{padding:28px 0 8px}
+.home-hero h1{font-size:clamp(40px,7vw,76px);line-height:.98;letter-spacing:-.035em;margin:14px 0 16px;font-weight:900}
+.home-hero.small h1{font-size:clamp(32px,5vw,52px)}
+.grad{background:linear-gradient(100deg,var(--brand),var(--navy-2) 60%,var(--a2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.home-hero p{font-size:18px;color:var(--muted);max-width:62ch}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.stats div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 18px;min-width:120px}
+.stats b{display:block;font-size:28px;font-weight:900;letter-spacing:-.02em}.stats span{color:var(--muted);font-size:13px}
+.sec-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin:26px 0}
+.sec-card{position:relative;display:flex;flex-direction:column;gap:4px;padding:20px;border-radius:var(--radius);background:var(--surface);
+  border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:var(--shadow);overflow:hidden;transition:transform .2s}
+.sec-card::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:var(--acc)}
+.sec-card:hover{transform:translateY(-3px)}
+.sec-card .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;color:var(--acc);
+  background:color-mix(in srgb,var(--acc) 14%,transparent);margin-bottom:6px}
+.sec-card strong{font-size:18px}.sec-card>span{color:var(--muted);font-size:13px;font-weight:700}
+.sec-card p{font-size:14px;color:var(--muted);margin:6px 0 12px}
+.sec-card .bar{margin-top:auto;height:6px;border-radius:9px;background:var(--line);overflow:hidden}
+.sec-card .bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .5s}
+.plan h2{margin:0 0 8px}.plan ol{margin:0;padding-left:20px}.plan li{margin:6px 0}
+.idx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:20px}
+.idx-card{display:block;padding:18px;border-radius:16px;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.idx-card:hover{border-color:var(--brand)}.idx-card .n{color:var(--brand);font-weight:900;font-size:13px}
+.idx-card strong{display:block;margin:2px 0 6px}.idx-card p{margin:0;color:var(--muted);font-size:14px}
+
+/* ---------- fiche ---------- */
+.hero{position:relative;padding:28px 28px 24px;border-radius:24px;overflow:hidden;margin-bottom:18px;
+  background:radial-gradient(120% 140% at 100% 0%,color-mix(in srgb,var(--acc) 22%,transparent),transparent 55%),
+  radial-gradient(80% 120% at 0% 100%,color-mix(in srgb,var(--navy-2) 12%,transparent),transparent 60%),var(--surface);
+  border:1px solid var(--line);box-shadow:var(--shadow)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:6px}
+.hero h1{font-size:clamp(30px,4.6vw,50px);line-height:1.05;letter-spacing:-.03em;margin:14px 0 14px;font-weight:900;overflow-wrap:anywhere;hyphens:auto}
+.hero h1 .num{display:inline-block;color:var(--acc);margin-right:12px;font-variant-numeric:tabular-nums}
+.zin{font-size:clamp(17px,2.2vw,21px);line-height:1.5;margin:0;max-width:70ch}
+.zin strong{color:var(--ink);background:linear-gradient(transparent 62%,color-mix(in srgb,var(--acc) 28%,transparent) 0)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+.btn.known.on{background:var(--hl);border-color:var(--brand);color:var(--ink)}
+.btn.known.on .ic{color:var(--brand)}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg button{border:0;background:none;padding:7px 12px;border-radius:9px;font-weight:700;font-size:14px;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.toc{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:10px 0;margin-bottom:6px;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);scrollbar-width:none}
+.toc a{flex:none;font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);text-decoration:none}
+.toc a:hover{color:var(--ink);border-color:var(--acc)}
+.block{margin:22px 0 30px}
+.bh{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.bh span{color:var(--acc);font-variant-numeric:tabular-nums}
+.bh::after{content:"";flex:1;height:1px;background:var(--line)}
+.viz{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0}
+.viz svg{width:100%;height:auto;max-height:72vh;display:block}
+.viz{position:relative}
+.zoom-btn{position:absolute;top:10px;right:10px;z-index:1;width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
+  background:color-mix(in srgb,var(--surface) 85%,transparent);color:var(--muted);font-size:17px;line-height:1;
+  display:grid;place-items:center;opacity:.75;transition:opacity .15s,color .15s,border-color .15s,transform .15s}
+.viz:hover .zoom-btn,.zoom-btn:focus-visible{opacity:1}
+.zoom-btn:hover{color:var(--brand);border-color:var(--brand);transform:scale(1.06)}
+body.zoomed{overflow:hidden}
+.zoom-overlay{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:24px;
+  background:color-mix(in srgb,#020817 62%,transparent);backdrop-filter:blur(6px);animation:zoom-fade .18s ease-out}
+.zoom-win{width:min(1400px,100%);max-height:100%;overflow:auto;background:var(--surface);border:1px solid var(--line);
+  border-radius:calc(var(--radius) + 4px);box-shadow:0 30px 80px rgba(0,0,0,.35);padding:18px 22px 22px;animation:zoom-pop .22s cubic-bezier(.2,.9,.3,1.2)}
+.zoom-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.zoom-head b{flex:1;font-size:18px;letter-spacing:-.01em}
+.zoom-body svg{width:100%;height:auto;max-height:calc(100vh - 200px);display:block}
+.zoom-cap{color:var(--muted);margin:14px 0 0;padding-top:12px;border-top:1px dashed var(--line)}
+@keyframes zoom-fade{from{opacity:0}}
+@keyframes zoom-pop{from{opacity:0;transform:scale(.94)}}
+@media (prefers-reduced-motion:reduce){.zoom-overlay,.zoom-win{animation:none}}
+.viz figcaption{font-size:14px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px;margin-top:14px}
+.gallery .viz:only-child{grid-column:1/-1}
+@media (max-width:760px){.gallery{grid-template-columns:minmax(0,1fr)}}
+.lv-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.lv-grid{grid-template-columns:minmax(0,1fr)}}
+.lv-h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.lv .dot{width:10px;height:10px;border-radius:50%}
+.lv.junior .lv-h{color:var(--brand)}.lv.junior .dot{background:var(--brand)}
+.lv.senior .lv-h{color:var(--navy-2)}.lv.senior .dot{background:var(--navy-2)}
+.lv.senior{background:linear-gradient(180deg,color-mix(in srgb,var(--navy-2) 6%,var(--surface)),var(--surface))}
+.lv ul,.vraag ul{margin:0;padding-left:20px}.lv li{margin:7px 0;overflow-wrap:anywhere}
+html[data-level="junior"] .lv.senior,html[data-level="senior"] .lv.junior{display:none}
+html[data-level="junior"] .lv-grid,html[data-level="senior"] .lv-grid{grid-template-columns:minmax(0,1fr)}
+.praktijk{display:flex;gap:14px;border-left:4px solid var(--acc)}
+.pk-ic{font-size:22px;color:var(--acc);font-weight:900}
+.praktijk p{margin:0 0 8px}.praktijk p:last-child{margin:0}
+.terms{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin:0}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.term dt{font-weight:800;color:var(--acc);margin-bottom:2px}.term dd{margin:0;font-size:14px;color:var(--muted)}
+.code{border-radius:16px;overflow:hidden;background:#0b1220;border:1px solid #1d2a3f;box-shadow:var(--shadow);margin-bottom:14px}
+.code-h{display:flex;gap:6px;align-items:center;padding:10px 14px;background:#111a2c}
+.code-h span{width:10px;height:10px;border-radius:50%;background:#ff5f57}.code-h span:nth-child(2){background:#febc2e}.code-h span:nth-child(3){background:#28c840}
+.code-h em{margin-left:auto;color:#8aa0bf;font-style:normal;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.code pre{margin:0;padding:16px 18px;overflow-x:auto;color:#d7e3f4;font-size:13.5px;line-height:1.6}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow)}
+.tbl table{border-collapse:collapse;width:100%;font-size:14px}
+.tbl th{text-align:left;background:var(--surface-2);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tbl th,.tbl td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}.tbl td:first-child{font-weight:700}
+.pits{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.pit{display:flex;gap:10px;background:var(--bad);color:var(--bad-ink);border-radius:14px;padding:12px 14px}
+.pit span{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--bad-ink);color:var(--bad);font-weight:900;font-size:13px}
+.pit p{margin:0;font-size:14px}
+.ezel{background:var(--warn);color:var(--warn-ink);border-radius:var(--radius);padding:16px 20px;margin-bottom:14px;font-weight:600;font-size:17px}
+.ezel small,.vraag small,.flash small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:4px;font-weight:800}
+.vraag{border:2px solid var(--acc);margin-bottom:14px}.vraag small{color:var(--acc)}
+.vraag .q{font-size:20px;font-weight:800;margin:4px 0 10px;letter-spacing:-.01em}
+.vraag summary{cursor:pointer;font-weight:700;color:var(--acc);margin-bottom:8px}
+.flashes{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.flash{border:0;background:none;padding:0;perspective:1000px;min-height:150px;text-align:left}
+.f-in{position:relative;display:block;width:100%;height:100%;min-height:150px;transition:transform .5s;transform-style:preserve-3d}
+.flash.flip .f-in{transform:rotateY(180deg)}
+.f-front,.f-back{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:16px 18px;border-radius:16px;
+  backface-visibility:hidden;border:1px solid var(--line);box-shadow:var(--shadow);font-weight:600;overflow:auto}
+.f-front{background:var(--surface)}
+.f-back{background:linear-gradient(135deg,color-mix(in srgb,var(--acc,var(--brand)) 18%,var(--surface)),var(--surface));transform:rotateY(180deg)}
+.hint{font-size:13px;color:var(--muted)}
+.cl{font-size:15px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px}
+.cl strong{display:block;color:var(--ink);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+
+/* ---------- quiz ---------- */
+.quiz-wrap{max-width:720px;margin:0 auto}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.quiz-top h1{margin:0;font-size:34px;letter-spacing:-.02em}
+.quiz-filter{display:inline-flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;flex-wrap:wrap}
+.quiz-filter button{border:0;background:none;padding:6px 10px;border-radius:9px;font-weight:700;font-size:13px;color:var(--muted)}
+.quiz-filter button.on{background:var(--soft);color:var(--ink)}
+.quiz-progress{height:8px;border-radius:9px;background:var(--line);overflow:hidden;margin:18px 0 6px}
+.quiz-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--navy-2));transition:width .3s}
+.quiz-count{color:var(--muted);font-size:14px;margin:0 0 12px}
+.flash.big{width:100%;min-height:280px}.flash.big .f-in{min-height:280px}
+.flash.big .f-front,.flash.big .f-back{font-size:22px;padding:28px}
+.quiz-actions{display:flex;justify-content:center;gap:12px;margin:18px 0 6px}
+
+/* ---------- standalone ---------- */
+body.solo{min-height:100vh}
+.solo-top{display:flex;align-items:center;gap:14px;padding:14px clamp(16px,4vw,40px);border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+.brand-s{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);text-decoration:none}
+.brand-s .logo{width:30px;height:30px;border-radius:9px;font-size:14px}
+.solo-top .crumb{color:var(--muted);font-size:14px}.solo-top .icon-btn{margin-left:auto}
+.solo-main{margin:0 auto}
+body.solo .fiche{display:block}
+
+/* ---------- SVG ---------- */
+.node rect,.node circle,.node polygon{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1.5;filter:url(#none)}
+.node.alt rect,.node.alt polygon{fill:var(--soft)}
+.node.soft rect{fill:var(--surface);stroke:var(--line)}
+.node.hl rect,.node.hl circle,.node.hl polygon{fill:var(--acc,var(--brand));stroke:none}
+.node.hl .lbl{fill:var(--on-brand)}
+:root:not([data-theme="dark"]) .node.hl .lbl{fill:#fff}
+.lbl{fill:var(--ink);font:600 15px 'Libre Franklin',system-ui,sans-serif}
+.center-lbl{fill:var(--muted);font:700 15px 'Libre Franklin',system-ui,sans-serif}
+.step-no{fill:var(--acc,var(--brand));font:800 12px 'Libre Franklin',system-ui,sans-serif;letter-spacing:.08em}
+.edge line,.edge path{stroke:var(--acc,var(--brand));stroke-width:2.2}
+.edge.plain line,.edge.plain path{stroke:var(--line-2);stroke-width:2}
+.arrowhead{fill:var(--acc,var(--brand))}
+.edge-lbl{fill:var(--muted);font:600 13px 'Libre Franklin',system-ui,sans-serif}
+.note-txt{fill:var(--muted);font:500 14px 'Libre Franklin',system-ui,sans-serif}
+.dash{stroke:var(--line-2);stroke-dasharray:4 4;stroke-width:1.5}.dot{fill:var(--acc,var(--brand))}
+.orbit{fill:none;stroke:var(--line-2);stroke-width:2;stroke-dasharray:6 7}
+.vs{fill:var(--muted);font:900 15px 'Libre Franklin',system-ui,sans-serif}.vs-c{fill:var(--surface);stroke:var(--line-2)}
+.tl-line{stroke:var(--line-2);stroke-width:3;stroke-linecap:round}
+.tl-dot{fill:var(--acc,var(--brand))}.tl-no{fill:#fff;font:800 11px 'Libre Franklin',system-ui,sans-serif}
+.venn circle{stroke-width:2;fill-opacity:.16}
+.venn.v0 circle{fill:var(--a0);stroke:var(--a0)}.venn.v1 circle{fill:var(--a1);stroke:var(--a1)}.venn.v2 circle{fill:var(--a3);stroke:var(--a3)}
+.bar-bg{fill:var(--surface-2)}.bar rect{fill:var(--acc,var(--brand))}
+.ring b{font-weight:800}
+</style></head>
+<body class="solo"><header class="solo-top"><a href="../curelytics-gids.html#alg-005" class="brand-s"><span class="logo">C</span>CureLytics studiegids</a><span class="crumb"><a href="index.html">Algemeen</a> / 005</span><button type="button" class="icon-btn" data-theme-toggle aria-label="Licht/donker">◐</button></header><main class="main solo-main"><article class="fiche a0" id="alg-005" data-bron="_generator/content_algemeen.py · FICHES[4]" data-titel="AVG &amp; data governance" data-search="avg &amp; data governance avg (gdpr) is de wet die persoonsgegevens beschermt; data governance is hoe een organisatie afspreekt wie verantwoordelijk is voor welke data en hoe die gebruikt mag worden."><header class="hero"><div class="hero-meta"><span class="chip sec">◎ Algemeen</span><span class="chip">fiche 005 / 010</span><span class="chip lvl j">Junior</span><span class="chip lvl s">Senior</span></div><h1><span class="num">005</span>AVG &amp; data governance</h1><p class="zin" id="alg-005-zin"><strong>AVG (GDPR)</strong> is de wet die persoonsgegevens beschermt; <strong>data governance</strong> is hoe een organisatie afspreekt wie verantwoordelijk is voor welke data en hoe die gebruikt mag worden.</p><div class="hero-actions"><button class="btn known" data-known="alg-005" type="button"><span class="ic">○</span> Markeer als gekend</button><div class="seg" role="group" aria-label="Niveau"><button type="button" data-level="beide" class="on">Beide</button><button type="button" data-level="junior">Junior</button><button type="button" data-level="senior">Senior</button></div></div></header><nav class="toc"><a href="#alg-005-visueel" data-jump>Visueel</a><a href="#alg-005-niveaus" data-jump>Junior & senior</a><a href="#alg-005-praktijk" data-jump>Praktijk</a><a href="#alg-005-begrippen" data-jump>Begrippen</a><a href="#alg-005-valkuilen" data-jump>Valkuilen</a><a href="#alg-005-oefenen" data-jump>Oefenen</a></nav><section class="block" id="alg-005-visueel"><h2 class="bh"><span>01</span>Visueel</h2><figure class="viz big" id="alg-005-v0"><button type="button" class="zoom-btn" data-zoom aria-label="Vergroot deze visual" title="Vergroot">⤢</button><svg viewBox="0 0 880 420" role="img" aria-label="AVG &amp; data governance" xmlns="http://www.w3.org/2000/svg"><defs><marker id="alg-005-v0-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><linearGradient id="alg-005-v0-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="g0"/><stop offset="1" class="g1"/></linearGradient><filter id="alg-005-v0-sh" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" class="shadow"/></filter></defs><g id="alg-005-v0-lijn-1" class="edge plain"><title></title><line x1="440" y1="210" x2="440" y2="60"/></g><g id="alg-005-v0-lijn-2" class="edge plain"><title></title><line x1="440" y1="210" x2="700" y2="135"/></g><g id="alg-005-v0-lijn-3" class="edge plain"><title></title><line x1="440" y1="210" x2="700" y2="285"/></g><g id="alg-005-v0-lijn-4" class="edge plain"><title></title><line x1="440" y1="210" x2="440" y2="360"/></g><g id="alg-005-v0-lijn-5" class="edge plain"><title></title><line x1="440" y1="210" x2="180" y2="285"/></g><g id="alg-005-v0-lijn-6" class="edge plain"><title></title><line x1="440" y1="210" x2="180" y2="135"/></g><g id="alg-005-v0-kern" class="node hl"><title>Data governance</title><circle cx="440" cy="210" r="72"/><text x="440" y="201" class="lbl" text-anchor="middle" dominant-baseline="middle">Data</text><text x="440" y="219" class="lbl" text-anchor="middle" dominant-baseline="middle">governance</text></g><g id="alg-005-v0-punt-1" class="node"><title>Eigenaarschap (data owner)</title><rect x="356" y="30" width="168" height="60" rx="14"/><text x="440" y="51" class="lbl" text-anchor="middle" dominant-baseline="middle">Eigenaarschap</text><text x="440" y="69" class="lbl" text-anchor="middle" dominant-baseline="middle">(data owner)</text></g><g id="alg-005-v0-punt-2" class="node"><title>Datakwaliteit</title><rect x="616" y="105" width="168" height="60" rx="14"/><text x="700" y="135" class="lbl" text-anchor="middle" dominant-baseline="middle">Datakwaliteit</text></g><g id="alg-005-v0-punt-3" class="node"><title>Privacy (AVG)</title><rect x="616" y="255" width="168" height="60" rx="14"/><text x="700" y="285" class="lbl" text-anchor="middle" dominant-baseline="middle">Privacy (AVG)</text></g><g id="alg-005-v0-punt-4" class="node"><title>Security (toegang)</title><rect x="356" y="330" width="168" height="60" rx="14"/><text x="440" y="351" class="lbl" text-anchor="middle" dominant-baseline="middle">Security</text><text x="440" y="369" class="lbl" text-anchor="middle" dominant-baseline="middle">(toegang)</text></g><g id="alg-005-v0-punt-5" class="node"><title>Metadata &amp; lineage</title><rect x="96" y="255" width="168" height="60" rx="14"/><text x="180" y="276" class="lbl" text-anchor="middle" dominant-baseline="middle">Metadata</text><text x="180" y="294" class="lbl" text-anchor="middle" dominant-baseline="middle">&amp; lineage</text></g><g id="alg-005-v0-punt-6" class="node"><title>Beleid &amp; standaarden</title><rect x="96" y="105" width="168" height="60" rx="14"/><text x="180" y="126" class="lbl" text-anchor="middle" dominant-baseline="middle">Beleid &amp;</text><text x="180" y="144" class="lbl" text-anchor="middle" dominant-baseline="middle">standaarden</text></g></svg><figcaption>Governance verbindt mensen, regels en techniek rond data.</figcaption></figure><div class="gallery"><figure class="viz" id="alg-005-v1"><button type="button" class="zoom-btn" data-zoom aria-label="Vergroot deze visual" title="Vergroot">⤢</button><svg viewBox="0 0 880 204" role="img" aria-label="AVG &amp; data governance" xmlns="http://www.w3.org/2000/svg"><defs><marker id="alg-005-v1-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><linearGradient id="alg-005-v1-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="g0"/><stop offset="1" class="g1"/></linearGradient><filter id="alg-005-v1-sh" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" class="shadow"/></filter></defs><g id="alg-005-v1-kolom-1" class="node hl"><title>Anoniem</title><rect x="20" y="15" width="260" height="56" rx="14"/><text x="150" y="43" class="lbl" text-anchor="middle" dominant-baseline="middle">Anoniem</text></g><g id="alg-005-v1-item-1-1" class="node soft"><title>Niet herleidbaar</title><rect x="28" y="84" width="244" height="42" rx="10"/><text x="150" y="105" class="lbl" text-anchor="middle" dominant-baseline="middle">Niet herleidbaar</text></g><g id="alg-005-v1-item-1-2" class="node soft"><title>Buiten de AVG</title><rect x="28" y="136" width="244" height="42" rx="10"/><text x="150" y="157" class="lbl" text-anchor="middle" dominant-baseline="middle">Buiten de AVG</text></g><g id="alg-005-v1-kolom-2" class="node hl"><title>Gepseudonimiseerd</title><rect x="310" y="15" width="260" height="56" rx="14"/><text x="440" y="43" class="lbl" text-anchor="middle" dominant-baseline="middle">Gepseudonimiseerd</text></g><g id="alg-005-v1-item-2-1" class="node soft"><title>Herleidbaar met sleutel</title><rect x="318" y="84" width="244" height="42" rx="10"/><text x="440" y="105" class="lbl" text-anchor="middle" dominant-baseline="middle">Herleidbaar met sleutel</text></g><g id="alg-005-v1-item-2-2" class="node soft"><title>Wél persoonsdata</title><rect x="318" y="136" width="244" height="42" rx="10"/><text x="440" y="157" class="lbl" text-anchor="middle" dominant-baseline="middle">Wél persoonsdata</text></g><g id="alg-005-v1-kolom-3" class="node hl"><title>Identificerend</title><rect x="600" y="15" width="260" height="56" rx="14"/><text x="730" y="43" class="lbl" text-anchor="middle" dominant-baseline="middle">Identificerend</text></g><g id="alg-005-v1-item-3-1" class="node soft"><title>Naam, BSN, e-mail</title><rect x="608" y="84" width="244" height="42" rx="10"/><text x="730" y="105" class="lbl" text-anchor="middle" dominant-baseline="middle">Naam, BSN, e-mail</text></g><g id="alg-005-v1-item-3-2" class="node soft"><title>Volledig AVG</title><rect x="608" y="136" width="244" height="42" rx="10"/><text x="730" y="157" class="lbl" text-anchor="middle" dominant-baseline="middle">Volledig AVG</text></g></svg><figcaption>Belangrijk onderscheid: pseudonimiseren verlaagt risico, maar het blijft persoonsdata.</figcaption></figure><figure class="viz" id="alg-005-v2"><button type="button" class="zoom-btn" data-zoom aria-label="Vergroot deze visual" title="Vergroot">⤢</button><svg viewBox="0 0 880 296" role="img" aria-label="AVG &amp; data governance" xmlns="http://www.w3.org/2000/svg"><defs><marker id="alg-005-v2-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrowhead"/></marker><linearGradient id="alg-005-v2-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="g0"/><stop offset="1" class="g1"/></linearGradient><filter id="alg-005-v2-sh" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="4" class="shadow"/></filter></defs><g id="alg-005-v2-root" class="node hl"><title>Rollen</title><rect x="340" y="12" width="200" height="56" rx="14"/><text x="440" y="40" class="lbl" text-anchor="middle" dominant-baseline="middle">Rollen</text></g><g class="edge plain"><path d="M440,68 C440,95 160,95 160,118" fill="none"/></g><g id="alg-005-v2-tak-1" class="node"><title>Data owner</title><rect x="28" y="118" width="264" height="52" rx="14"/><text x="160" y="144" class="lbl" text-anchor="middle" dominant-baseline="middle">Data owner</text></g><g id="alg-005-v2-blad-1-1" class="node soft"><title>Beslist over gebruik</title><rect x="38" y="186" width="244" height="38" rx="10"/><text x="160" y="205" class="lbl" text-anchor="middle" dominant-baseline="middle">Beslist over gebruik</text></g><g id="alg-005-v2-blad-1-2" class="node soft"><title>Eindverantwoordelijk</title><rect x="38" y="234" width="244" height="38" rx="10"/><text x="160" y="253" class="lbl" text-anchor="middle" dominant-baseline="middle">Eindverantwoordelijk</text></g><g class="edge plain"><path d="M440,68 C440,95 440,95 440,118" fill="none"/></g><g id="alg-005-v2-tak-2" class="node"><title>Data steward</title><rect x="308" y="118" width="264" height="52" rx="14"/><text x="440" y="144" class="lbl" text-anchor="middle" dominant-baseline="middle">Data steward</text></g><g id="alg-005-v2-blad-2-1" class="node soft"><title>Bewaakt kwaliteit</title><rect x="318" y="186" width="244" height="38" rx="10"/><text x="440" y="205" class="lbl" text-anchor="middle" dominant-baseline="middle">Bewaakt kwaliteit</text></g><g id="alg-005-v2-blad-2-2" class="node soft"><title>Definities</title><rect x="318" y="234" width="244" height="38" rx="10"/><text x="440" y="253" class="lbl" text-anchor="middle" dominant-baseline="middle">Definities</text></g><g class="edge plain"><path d="M440,68 C440,95 720,95 720,118" fill="none"/></g><g id="alg-005-v2-tak-3" class="node"><title>FG / privacy officer</title><rect x="588" y="118" width="264" height="52" rx="14"/><text x="720" y="144" class="lbl" text-anchor="middle" dominant-baseline="middle">FG / privacy officer</text></g><g id="alg-005-v2-blad-3-1" class="node soft"><title>Toezicht AVG</title><rect x="598" y="186" width="244" height="38" rx="10"/><text x="720" y="205" class="lbl" text-anchor="middle" dominant-baseline="middle">Toezicht AVG</text></g><g id="alg-005-v2-blad-3-2" class="node soft"><title>Adviseert</title><rect x="598" y="234" width="244" height="38" rx="10"/><text x="720" y="253" class="lbl" text-anchor="middle" dominant-baseline="middle">Adviseert</text></g></svg><figcaption>Wie doet wat in data governance.</figcaption></figure></div></section><section class="block levels" id="alg-005-niveaus"><h2 class="bh"><span>02</span>Junior &amp; senior</h2><div class="lv-grid"><div class="card lv junior"><div class="lv-h"><span class="dot"></span>Junior – de kern</div><ul class=""><li><strong>Persoonsgegeven:</strong> alles wat naar een persoon te herleiden is (naam, BSN, IP-adres).</li><li><strong>AVG-principes (art. 5):</strong> rechtmatig/behoorlijk/transparant, doelbinding, dataminimalisatie, juistheid, opslagbeperking, integriteit &amp; vertrouwelijkheid – plus <strong>verantwoordingsplicht</strong>.</li><li><strong>6 grondslagen:</strong> toestemming, overeenkomst, wettelijke plicht, vitaal belang, <strong>publieke taak</strong> (meestal bij overheid), gerechtvaardigd belang.</li><li>Bijzondere gegevens (gezondheid!) extra beschermd – belangrijk in de zorg.</li><li>Rollen: <strong>data owner</strong> (beslist), <strong>data steward</strong> (beheert kwaliteit).</li></ul></div><div class="card lv senior"><div class="lv-h"><span class="dot"></span>Senior – de diepte</div><ul class=""><li><strong>DPIA</strong> (Data Protection Impact Assessment) verplicht bij hoog risico – o.a. grootschalige verwerking van gezondheidsgegevens (lijst van de AP).</li><li>Gepseudonimiseerde data blijven persoonsgegevens; alleen echt geanonimiseerde data vallen buiten de AVG.</li><li>Technische maatregelen: pseudonimisering, maskering, RBAC, Row-Level Security, encryptie.</li><li>Normen publieke sector: <strong>BIO</strong> (Baseline Informatiebeveiliging Overheid), ISO 27001.</li><li>Data catalog (bv. Microsoft Purview, Unity Catalog) voor metadata, lineage en classificatie.</li></ul></div></div></section><section class="block" id="alg-005-praktijk"><h2 class="bh"><span>03</span>Praktijkvoorbeeld</h2><div class="card praktijk"><div class="pk-ic">↳</div><div><p>Een GGD wil een dashboard met vaccinatiegraad per wijk. Oplossing: de data engineer pseudonimiseert in de bronslaag, het goud-model bevat alleen aantallen per wijk (met een minimum van bijv. 10 personen per cel om herleidbaarheid te voorkomen), en de FG keurt de DPIA goed vóór livegang.</p></div></div></section><section class="block" id="alg-005-begrippen"><h2 class="bh"><span>04</span>Begrippen</h2><dl class="terms"><div class="term"><dt>AVG / GDPR</dt><dd>Europese privacywet voor persoonsgegevens.</dd></div><div class="term"><dt>Grondslag</dt><dd>De wettelijke basis om gegevens te mogen verwerken (6 stuks).</dd></div><div class="term"><dt>DPIA</dt><dd>Risicoanalyse vooraf bij verwerkingen met hoog privacyrisico.</dd></div><div class="term"><dt>FG</dt><dd>Functionaris Gegevensbescherming – interne toezichthouder.</dd></div><div class="term"><dt>BIO</dt><dd>Baseline Informatiebeveiliging Overheid.</dd></div></dl></section><section class="block" id="alg-005-valkuilen"><h2 class="bh"><span>05</span>Valkuilen</h2><div class="pits"><div class="pit"><span>!</span><p>Denken dat pseudonimiseren betekent dat de AVG niet meer geldt.</p></div><div class="pit"><span>!</span><p>Een kopie van productiedata met persoonsgegevens in een testomgeving zetten.</p></div><div class="pit"><span>!</span><p>Kleine aantallen per cel tonen (bv. 2 personen in een wijk) → herleidbaar.</p></div></div></section><section class="block" id="alg-005-oefenen"><h2 class="bh"><span>06</span>Oefenen</h2><div class="ezel"><small>Ezelsbruggetje</small><strong>WET-DOEL-MIN-JUIST-TIJD-VEILIG</strong>: volgens de <em>wet</em> (rechtmatig, transparant), alleen voor het <em>doel</em>, zo <em>min</em> mogelijk, <em>juist</em>, niet langer dan <em>tijd</em>, en <em>veilig</em> – en kunnen aantonen dat je het doet.</div><div class="card vraag"><small>Mogelijke interviewvraag</small><p class="q">“Je bouwt een dashboard met cliëntgegevens van een zorginstelling. Waar let je op?”</p><details><summary>Eerst zelf antwoorden – dan klik voor de antwoordrichting</summary><ul class=""><li>Grondslag en doel helder; alleen velden die nodig zijn (dataminimalisatie), liefst geaggregeerd.</li><li>Pseudonimiseren verkleint risico, maar het blijft persoonsdata. Toegang per rol (RLS) – een teamleider ziet alleen eigen team.</li><li>Afstemmen met de FG / privacy officer; een DPIA is hier waarschijnlijk verplicht (gezondheidsgegevens).</li></ul></details></div><div class="flashes"><button type="button" class="flash" data-q="Noem de 6 grondslagen van de AVG." data-a="Toestemming, overeenkomst, wettelijke plicht, vitaal belang, publieke taak, gerechtvaardigd belang." data-fiche="alg-005"><span class="f-in"><span class="f-front"><small>Vraag</small>Noem de 6 grondslagen van de AVG.</span><span class="f-back"><small>Antwoord</small>Toestemming, overeenkomst, wettelijke plicht, vitaal belang, publieke taak, gerechtvaardigd belang.</span></span></button><button type="button" class="flash" data-q="Is gepseudonimiseerde data nog persoonsdata?" data-a="Ja – alleen anonieme data valt buiten de AVG." data-fiche="alg-005"><span class="f-in"><span class="f-front"><small>Vraag</small>Is gepseudonimiseerde data nog persoonsdata?</span><span class="f-back"><small>Antwoord</small>Ja – alleen anonieme data valt buiten de AVG.</span></span></button><button type="button" class="flash" data-q="Wanneer is een DPIA verplicht?" data-a="Bij hoog risico, bv. grootschalige verwerking van gezondheidsgegevens." data-fiche="alg-005"><span class="f-in"><span class="f-front"><small>Vraag</small>Wanneer is een DPIA verplicht?</span><span class="f-back"><small>Antwoord</small>Bij hoog risico, bv. grootschalige verwerking van gezondheidsgegevens.</span></span></button><button type="button" class="flash" data-q="Wat doet een data steward?" data-a="Bewaakt datakwaliteit en definities namens de data owner." data-fiche="alg-005"><span class="f-in"><span class="f-front"><small>Vraag</small>Wat doet een data steward?</span><span class="f-back"><small>Antwoord</small>Bewaakt datakwaliteit en definities namens de data owner.</span></span></button></div><p class="hint">Klik op een kaart om hem om te draaien.</p></section><p class="cl"><strong>Waarom dit telt bij CureLytics</strong>klanten in zorg en overheid → AVG, ISO 27001 en governance staan expliciet in de vacatures.</p></article><nav class="pager solo"><a href="004-agile-en-scrum.html">← vorige</a><a href="index.html">overzicht</a><a href="006-cloud-azure-aws-en-gcp.html">volgende →</a></nav></main><script>(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (_) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) {} }
+  };
+  var root = document.documentElement;
+
+  // thema
+  $$('[data-theme-toggle]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = t;
+      try { localStorage.setItem('cl-theme', t); } catch (_) {}
+    });
+  });
+
+  // niveau (junior / senior / beide)
+  function setLevel(l) {
+    root.dataset.level = l;
+    $$('.seg [data-level]').forEach(function (b) { b.classList.toggle('on', b.dataset.level === l); });
+    store.set('cl-level', l);
+  }
+  $$('.seg [data-level]').forEach(function (b) {
+    b.addEventListener('click', function () { setLevel(b.dataset.level); });
+  });
+  setLevel(store.get('cl-level', 'beide'));
+
+  // flashcards omdraaien
+  document.addEventListener('click', function (ev) {
+    var f = ev.target.closest('.flash');
+    if (f && f.id !== 'quiz-card') f.classList.toggle('flip');
+  });
+
+  // gekend
+  var known = store.get('cl-known', []);
+  function renderKnown() {
+    $$('[data-known]').forEach(function (b) {
+      var on = known.indexOf(b.dataset.known) > -1;
+      b.classList.toggle('on', on);
+      b.innerHTML = on ? '<span class="ic">✓</span> Gekend' : '<span class="ic">○</span> Markeer als gekend';
+    });
+    $$('.nav-f').forEach(function (a) { a.classList.toggle('known', known.indexOf(a.dataset.id) > -1); });
+    var total = $$('.nav-f').length;
+    $$('[data-progress]').forEach(function (p) {
+      var sid = p.dataset.progress;
+      var items = $$('.nav-f[data-id^="' + sid + '-"]');
+      var k = items.filter(function (a) { return a.classList.contains('known'); }).length;
+      p.textContent = k + '/' + items.length;
+      var bar = $('[data-bar="' + sid + '"]');
+      if (bar) bar.style.width = (items.length ? 100 * k / items.length : 0) + '%';
+    });
+    if (total) {
+      var k = $$('.nav-f.known').length;
+      var pct = Math.round(100 * k / total);
+      var ring = $('#ring');
+      if (ring) ring.style.strokeDashoffset = 97.4 * (1 - pct / 100);
+      var rt = $('#ring-t'); if (rt) rt.textContent = pct + '%';
+      var sk = $('[data-stat="known"]'); if (sk) sk.textContent = k;
+    }
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-known]');
+    if (!b) return;
+    var id = b.dataset.known, i = known.indexOf(id);
+    if (i > -1) known.splice(i, 1); else known.push(id);
+    store.set('cl-known', known);
+    renderKnown();
+  });
+  renderKnown();
+
+  // ---------------- alleen in de studiegids (app) ----------------
+  // ---------- vergroten: knop op elke visual opent een tijdelijk venster ----------
+  var zoomBox = null, zoomFrom = null;
+  function closeZoom() {
+    if (!zoomBox) return;
+    zoomBox.remove(); zoomBox = null;
+    document.body.classList.remove('zoomed');
+    if (zoomFrom) zoomFrom.focus();
+  }
+  function openZoom(fig, btn) {
+    closeZoom();
+    zoomFrom = btn;
+    var svg = $('svg', fig), cap = $('figcaption', fig);
+    zoomBox = document.createElement('div');
+    zoomBox.className = 'zoom-overlay';
+    zoomBox.innerHTML = '<div class="zoom-win" role="dialog" aria-modal="true" aria-label="Vergrote visual">' +
+      '<div class="zoom-head"><b></b><button type="button" class="icon-btn" data-zoom-close aria-label="Sluiten">✕</button></div>' +
+      '<div class="zoom-body"></div><p class="zoom-cap"></p></div>';
+    $('b', zoomBox).textContent = svg.getAttribute('aria-label') || '';
+    $('.zoom-body', zoomBox).appendChild(svg.cloneNode(true));
+    if (cap && cap.textContent.trim()) $('.zoom-cap', zoomBox).innerHTML = cap.innerHTML; else $('.zoom-cap', zoomBox).remove();
+    zoomBox.addEventListener('click', function (ev) {
+      if (ev.target === zoomBox || ev.target.closest('[data-zoom-close]')) closeZoom();
+    });
+    document.body.appendChild(zoomBox);
+    document.body.classList.add('zoomed');
+    $('[data-zoom-close]', zoomBox).focus();
+  }
+  document.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-zoom]');
+    if (b) openZoom(b.closest('figure'), b);
+  });
+  document.addEventListener('keydown', function (ev) {
+    if (zoomBox && ev.key === 'Escape') { ev.preventDefault(); closeZoom(); }
+  }, true);
+
+  if (!document.body.classList.contains('app')) return;
+  var fiches = $$('.fiche');
+  var ids = fiches.map(function (f) { return f.id; });
+  var sc = $('[data-stat="cards"]'); if (sc) sc.textContent = $$('.fiche .flash').length;
+
+  function show(id) {
+    var target = id || 'home';
+    var isFiche = ids.indexOf(target) > -1;
+    if (!isFiche && target !== 'quiz') target = 'home';
+    $$('.view').forEach(function (v) { v.classList.toggle('on', v.id === target); });
+    fiches.forEach(function (f) { f.classList.toggle('on', f.id === target); });
+    $$('.nav-f, .nav-top').forEach(function (a) { a.classList.toggle('on', a.dataset.id === target); });
+    var pager = $('.pager');
+    pager.classList.toggle('hidden', !isFiche);
+    if (isFiche) {
+      var i = ids.indexOf(target);
+      var prev = $('[data-prev]'), next = $('[data-next]');
+      prev.href = '#' + (ids[i - 1] || ''); prev.classList.toggle('off', i === 0);
+      next.href = '#' + (ids[i + 1] || ''); next.classList.toggle('off', i === ids.length - 1);
+      $('[data-pos]').textContent = (i + 1) + ' / ' + ids.length;
+      var active = $('.nav-f.on');
+      if (active) {
+        active.closest('.nav-sec').classList.remove('closed');
+        active.scrollIntoView({ block: 'nearest' });
+      }
+      document.title = target.toUpperCase() + ' · ' + $('#' + target).dataset.titel;
+    } else {
+      document.title = 'CureLytics – studiegids';
+    }
+    if (target === 'quiz') startQuiz();
+    document.body.classList.remove('menu');
+    window.scrollTo(0, 0);
+  }
+  function route() {
+    var h = location.hash.slice(1);
+    // ankers binnen een fiche (bv. bi-003-praktijk) → open fiche en scroll
+    var base = h.match(/^([a-z]+-\d{3})-/);
+    if (base && ids.indexOf(base[1]) > -1) {
+      if (!$('#' + base[1]).classList.contains('on')) show(base[1]);
+      var el = document.getElementById(h);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    show(h);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+
+  // sectie in-/uitklappen
+  $$('.nav-h').forEach(function (h) {
+    h.addEventListener('click', function () { h.parentNode.classList.toggle('closed'); });
+  });
+  $('.menu-btn').addEventListener('click', function () { document.body.classList.toggle('menu'); });
+
+  // zijbalk in-/uitklappen (desktop), onthouden per browser
+  function setSide(closed) {
+    document.body.classList.toggle('side-closed', closed);
+    store.set('cl-side-closed', closed);
+  }
+  if (store.get('cl-side-closed', false)) document.body.classList.add('side-closed');
+  $$('[data-side-toggle]').forEach(function (b) {
+    b.addEventListener('click', function () { setSide(!document.body.classList.contains('side-closed')); });
+  });
+
+  // zoeken
+  var q = $('#q');
+  q.addEventListener('input', function () {
+    var term = q.value.trim().toLowerCase();
+    $$('.nav-f').forEach(function (a) { a.classList.toggle('hide', term && a.dataset.search.indexOf(term) === -1); });
+    $$('.nav-sec').forEach(function (s) {
+      if (term) s.classList.toggle('closed', !$$('.nav-f:not(.hide)', s).length);
+    });
+  });
+
+  // ---------------- quiz ----------------
+  var deck = [], pos = 0, filter = 'alle';
+  var qc = $('#quiz-card');
+  function startQuiz() {
+    deck = $$('.fiche .flash').filter(function (f) {
+      return filter === 'alle' || f.dataset.fiche.indexOf(filter + '-') === 0;
+    }).filter(function (f) {
+      return known.indexOf(f.dataset.fiche) === -1 || filter !== 'alle';
+    }).map(function (f) { return { q: f.dataset.q, a: f.dataset.a, src: f.dataset.fiche }; });
+    for (var i = deck.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = deck[i]; deck[i] = deck[j]; deck[j] = t; }
+    pos = 0; drawQuiz();
+  }
+  function drawQuiz() {
+    qc.classList.remove('flip');
+    var card = deck[pos];
+    $('.quiz-progress i').style.width = (deck.length ? 100 * pos / deck.length : 100) + '%';
+    if (!card) {
+      $('.qq').textContent = deck.length ? 'Klaar! Alles doorlopen 🎉' : 'Geen kaarten in deze selectie.';
+      $('.qa').textContent = 'Kies een andere map of start opnieuw.';
+      $('.quiz-count').textContent = '';
+      return;
+    }
+    $('.qq').textContent = card.q;
+    $('.qa').textContent = card.a;
+    $('.quiz-count').textContent = 'Kaart ' + (pos + 1) + ' van ' + deck.length + ' · uit ' + card.src.toUpperCase();
+    $('[data-qsrc]').href = '#' + card.src;
+  }
+  qc.addEventListener('click', function () { qc.classList.toggle('flip'); });
+  $$('[data-qa]').forEach(function (b) {
+    b.addEventListener('click', function () { answer(b.dataset.qa); });
+  });
+  function answer(kind) {
+    if (!deck[pos]) return startQuiz();
+    if (kind === 'again') deck.push(deck[pos]);
+    pos++; drawQuiz();
+  }
+  $$('[data-qf]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      filter = b.dataset.qf;
+      $$('[data-qf]').forEach(function (x) { x.classList.toggle('on', x === b); });
+      startQuiz();
+    });
+  });
+
+  // toetsenbord
+  document.addEventListener('keydown', function (ev) {
+    if (zoomBox) return;
+    if (ev.target.matches('input, textarea')) { if (ev.key === 'Escape') ev.target.blur(); return; }
+    if (ev.key === '/') {
+      ev.preventDefault();
+      if (document.body.classList.contains('side-closed')) setSide(false);
+      q.focus(); return;
+    }
+    if (ev.key === '[') { setSide(!document.body.classList.contains('side-closed')); return; }
+    var inQuiz = $('#quiz').classList.contains('on');
+    if (inQuiz) {
+      if (ev.key === ' ') { ev.preventDefault(); qc.classList.toggle('flip'); }
+      if (ev.key === 'ArrowRight') answer('know');
+      if (ev.key === 'ArrowLeft') answer('again');
+      return;
+    }
+    var cur = ids.indexOf(location.hash.slice(1));
+    if (cur < 0) return;
+    if (ev.key === 'ArrowRight' && ids[cur + 1]) location.hash = ids[cur + 1];
+    if (ev.key === 'ArrowLeft' && ids[cur - 1]) location.hash = ids[cur - 1];
+  });
+})();
+</script></body></html>
