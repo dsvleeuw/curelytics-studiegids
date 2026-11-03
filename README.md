@@ -28,6 +28,16 @@ Stoppen: **End session** of **Send & End** in Lavish, of Ctrl+C. Logs staan in `
 
 Vereist: Python, Node.js (`npx`) en een ingelogde Claude CLI (`claude`, eenmalig `/login`).
 
+## Online zetten met Netlify
+
+De repo is klaar voor Netlify (`netlify.toml`):
+
+1. Netlify → **Add new site → Import an existing project** → GitHub → `curelytics-studiegids`.
+2. Instellingen worden uit `netlify.toml` gelezen (build: `bash _tools/netlify-build.sh`, publish: `dist`) → **Deploy**.
+
+Alleen de gegenereerde HTML gaat online; `/` opent direct de studiegids. Netlify draait geen Python:
+bouw lokaal (`python _generator/build.py`) en push, dan deployt Netlify automatisch.
+
 ## Zelf aanpassen
 
 Wijzig `_generator/content_*.py` (kern) of `_generator/content_*_extra.py` (uitbreiding) en draai:

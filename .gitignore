@@ -3,3 +3,5 @@ _tools/log/
 _bronnen/
 __pycache__/
 *.pyc
+dist/
+.netlify/

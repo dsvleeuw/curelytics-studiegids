@@ -1,0 +1,18 @@
+# Netlify: statische site, alleen de gegenereerde HTML wordt gepubliceerd (zie _tools/netlify-build.sh).
+[build]
+  command = "bash _tools/netlify-build.sh"
+  publish = "dist"
+
+# De studiegids is de startpagina; het oude overzicht blijft bereikbaar via /index.html.
+[[redirects]]
+  from = "/"
+  to = "/curelytics-gids.html"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
